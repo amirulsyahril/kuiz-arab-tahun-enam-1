@@ -108,14 +108,15 @@
         <aside class="w-full md:w-64 bg-white p-4 shadow-lg md:h-screen md:sticky top-0">
             <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Menu</h2>
             <nav id="menu-container" class="space-y-2">
-                <!-- Menu buttons will be inserted here by JS -->
+                 <a href="#" class="menu-btn" data-target="home">🏠 Halaman Utama</a>
+                 <a href="#" class="menu-btn" data-target="leaderboard">🏆 Papan Markah</a>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <div class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
             <header class="text-center mb-8">
-                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Kuiz Bahasa Arab</h1>
+                <h1 id="main-header" class="text-3xl sm:text-4xl font-bold text-blue-600">Kuiz Bahasa Arab</h1>
                 <div id="user-info" class="mt-2 text-gray-600">
                     <!-- User info will be inserted here -->
                 </div>
@@ -127,11 +128,19 @@
                  <div id="home-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Home section cards will be inserted here -->
                  </div>
+                 <div id="overall-results-container" class="mt-8 text-center">
+                    <!-- Overall score and submit button will appear here -->
+                 </div>
             </div>
 
             <!-- Quiz Screen -->
             <main id="quiz-container" class="space-y-12" style="display: none;">
-                <!-- Questions will be dynamically inserted here -->
+                 <div id="quiz-content" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Questions will be dynamically inserted here -->
+                 </div>
+                 <div id="section-results-container" class="mt-8 text-center">
+                    <!-- Section score and finish button will appear here -->
+                 </div>
             </main>
             
             <!-- Leaderboard Screen -->
@@ -143,23 +152,13 @@
                     </div>
                 </div>
             </div>
-
-            <div id="results-container" class="mt-12 text-center" style="display: none;">
-                <div class="score-card bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-bold mb-4">Keputusan</h2>
-                    <p class="text-xl">Skor Anda: <span id="score" class="font-bold text-blue-600">0</span> / <span id="total-questions" class="font-bold">0</span></p>
-                    <div id="results-actions" class="mt-6 space-x-4">
-                       <!-- Action buttons appear here -->
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
         const quizData = [
             {
-                section: "Bahagian 1: Pilih إسم إشارة (Isim Isyarah) yang Betul",
+                section: "Bahagian 1: Pilih إسم إشارة (Isim Isyarah) Dekat yang Betul",
                 questions: [
                     { question: "فُرْشَاةُ الأَسْنَانِ", options: ["هذا", "هذه"], answer: "هذه" },
                     { question: "مَعْجُونُ الأَسْنَانِ", options: ["هذا", "هذه"], answer: "هذا" },
@@ -210,7 +209,6 @@
         ];
 
         // --- Google Sheet Web App URL ---
-        // PENTING: Gantikan URL di bawah dengan URL Web App Google Apps Script anda sendiri.
         const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec';
 
         // --- Element References ---
@@ -218,29 +216,37 @@
         const mainAppContainer = document.getElementById('main-app-container');
         const loginForm = document.getElementById('login-form');
         const userInfo = document.getElementById('user-info');
+        const mainHeader = document.getElementById('main-header');
         const homeContainer = document.getElementById('home-container');
         const homeGrid = document.getElementById('home-grid');
+        const overallResultsContainer = document.getElementById('overall-results-container');
         const quizContainer = document.getElementById('quiz-container');
-        const resultsContainer = document.getElementById('results-container');
-        const resultsActions = document.getElementById('results-actions');
+        const quizContent = document.getElementById('quiz-content');
+        const sectionResultsContainer = document.getElementById('section-results-container');
         const leaderboardContainer = document.getElementById('leaderboard-container');
         const leaderboardContent = document.getElementById('leaderboard-content');
         const menuContainer = document.getElementById('menu-container');
-        const scoreEl = document.getElementById('score');
-        const totalQuestionsEl = document.getElementById('total-questions');
 
-        let score = 0;
-        let totalQuestions = 0;
-        let answeredQuestions = 0;
+        // --- State Variables ---
         let currentFullName = '';
         let currentSchoolName = '';
+        let sectionScores = {};
+        let currentSectionIndex = -1;
+        let currentSectionScore = 0;
+        let answeredInSection = 0;
+
+        function initializeScores() {
+            quizData.forEach((_, index) => {
+                sectionScores[`section_${index}`] = null;
+            });
+        }
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             currentFullName = document.getElementById('fullName').value;
             currentSchoolName = document.getElementById('schoolName').value;
 
-            if(currentFullName.trim() && currentSchoolName.trim()) {
+            if (currentFullName.trim() && currentSchoolName.trim()) {
                 userInfo.innerHTML = `<p class="font-semibold">${currentFullName}</p><p class="text-sm">${currentSchoolName}</p>`;
                 loginContainer.style.display = 'none';
                 mainAppContainer.className = 'flex flex-col md:flex-row min-h-screen';
@@ -248,70 +254,208 @@
             }
         });
 
+        menuContainer.addEventListener('click', (e) => {
+            if (e.target.matches('.menu-btn')) {
+                e.preventDefault();
+                const targetView = e.target.dataset.target;
+                showView(targetView);
+            }
+        });
+
         function showView(viewName) {
             homeContainer.style.display = 'none';
             quizContainer.style.display = 'none';
-            resultsContainer.style.display = 'none';
             leaderboardContainer.style.display = 'none';
-            
             document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
 
             if (viewName === 'home') {
+                mainHeader.textContent = "Kuiz Bahasa Arab";
                 homeContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="home"]')?.classList.add('active');
-            } else if (viewName === 'quiz') {
+                renderHomePage();
+            } else if (viewName.startsWith('quiz_')) {
+                const sectionIndex = parseInt(viewName.split('_')[1]);
+                renderQuizForSection(sectionIndex);
                 quizContainer.style.display = 'block';
-                resultsContainer.style.display = 'block';
             } else if (viewName === 'leaderboard') {
+                mainHeader.textContent = "Papan Markah";
                 leaderboardContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="leaderboard"]')?.classList.add('active');
                 showLeaderboardFromGoogleSheets();
             }
         }
 
+        function renderHomePage() {
+            homeGrid.innerHTML = '';
+            let completedCount = 0;
+            let totalScore = 0;
+            let totalPossibleScore = 0;
+
+            quizData.forEach((sectionData, index) => {
+                const score = sectionScores[`section_${index}`];
+                const sectionTotal = sectionData.questions.length;
+                totalPossibleScore += sectionTotal;
+
+                const isCompleted = score !== null;
+                if (isCompleted) {
+                    completedCount++;
+                    totalScore += score;
+                }
+
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-lg shadow-md transition-all cursor-pointer ${isCompleted ? 'bg-green-100 border-2 border-green-500' : 'bg-white hover:shadow-xl hover:scale-105'}`;
+                card.innerHTML = `
+                    <h3 class="font-bold text-lg text-blue-600">${sectionData.section.split(':')[0]}</h3>
+                    <p class="text-gray-700 mt-1">${sectionData.section.split(': ')[1]}</p>
+                    <div class="mt-4 font-bold text-lg ${isCompleted ? 'text-green-700' : 'text-gray-400'}">
+                        ${isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Selesai'}
+                    </div>
+                `;
+                card.onclick = () => showView(`quiz_${index}`);
+                homeGrid.appendChild(card);
+            });
+
+            if (completedCount > 0) {
+                overallResultsContainer.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+                        <h3 class="text-2xl font-bold mb-2">Markah Keseluruhan</h3>
+                        <p class="text-xl mb-4">
+                            <span class="font-bold text-blue-600">${totalScore}</span> / ${totalPossibleScore}
+                        </p>
+                        <button id="submit-overall-score-btn" class="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition-colors">
+                            Hantar Markah ke Papan Markah
+                        </button>
+                    </div>
+                `;
+                document.getElementById('submit-overall-score-btn').onclick = saveScoreToGoogleSheets;
+            } else {
+                overallResultsContainer.innerHTML = '';
+            }
+        }
+
+        function renderQuizForSection(sectionIndex) {
+            currentSectionIndex = sectionIndex;
+            currentSectionScore = 0;
+            answeredInSection = 0;
+            const sectionData = quizData[sectionIndex];
+            
+            mainHeader.textContent = sectionData.section.split(':')[0];
+            quizContent.innerHTML = '';
+            sectionResultsContainer.innerHTML = '';
+
+            sectionData.questions.forEach(q => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col';
+                const questionText = document.createElement('p');
+                questionText.className = 'arabic-text text-center mb-5 text-2xl flex-grow';
+                questionText.textContent = q.question + ".";
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'flex justify-center items-center gap-4';
+                const geminiFeatureContainer = document.createElement('div');
+                geminiFeatureContainer.className = 'mt-4 text-center';
+                geminiFeatureContainer.style.display = 'none';
+                const geminiBtn = document.createElement('button');
+                geminiBtn.className = 'gemini-btn font-semibold py-2 px-5 rounded-lg shadow-md transition-colors duration-300';
+                geminiBtn.textContent = '✨ Buat Ayat';
+                const geminiResultContainer = document.createElement('div');
+                geminiResultContainer.className = 'gemini-result';
+                geminiBtn.onclick = () => handleGeminiClick(q.question, geminiBtn, geminiResultContainer);
+                geminiFeatureContainer.appendChild(geminiBtn);
+                geminiFeatureContainer.appendChild(geminiResultContainer);
+
+                q.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.className = 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
+                    button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer, geminiFeatureContainer));
+                    optionsContainer.appendChild(button);
+                });
+                questionCard.appendChild(questionText);
+                questionCard.appendChild(optionsContainer);
+                questionCard.appendChild(geminiFeatureContainer);
+                quizContent.appendChild(questionCard);
+            });
+        }
+
+        function handleAnswerClick(button, option, question, optionsContainer, geminiContainer) {
+            optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            if (option === question.answer) {
+                button.classList.add('correct');
+                currentSectionScore++;
+            } else {
+                button.classList.add('incorrect');
+                optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.textContent === question.answer) btn.classList.add('correct');
+                });
+            }
+            answeredInSection++;
+            geminiContainer.style.display = 'block';
+            
+            const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
+            if (answeredInSection === totalQuestionsInSection) {
+                sectionScores[`section_${currentSectionIndex}`] = currentSectionScore;
+                sectionResultsContainer.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-2">Bahagian Selesai!</h3>
+                        <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${totalQuestionsInSection}</p>
+                        <button id="finish-section-btn" class="mt-4 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">
+                            Kembali ke Halaman Utama
+                        </button>
+                    </div>
+                `;
+                document.getElementById('finish-section-btn').onclick = () => showView('home');
+            }
+        }
+        
         async function saveScoreToGoogleSheets() {
-             if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
-                resultsActions.innerHTML = `<p class="text-red-500">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
+            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                overallResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
                 return;
             }
-            const submitBtn = document.getElementById('submit-score-btn');
+            const submitBtn = document.getElementById('submit-overall-score-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
+
+            const totalScore = Object.values(sectionScores).reduce((acc, val) => acc + (val || 0), 0);
+            const totalPossibleScore = quizData.reduce((acc, section) => acc + section.questions.length, 0);
 
             const data = {
                 fullName: currentFullName,
                 schoolName: currentSchoolName,
-                score: score,
-                totalQuestions: totalQuestions
+                scores: sectionScores,
+                totalScore: totalScore,
+                totalQuestions: totalPossibleScore
             };
 
             try {
-                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                // Using POST with 'no-cors' mode as a simple way to send data to Apps Script
+                 await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Required for simple POST requests to Apps Script
+                    mode: 'no-cors',
+                    cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(data),
+                    redirect: 'follow'
                 });
-
-                // NOTE: With 'no-cors', we can't read the response. We assume it's successful.
-                resultsActions.innerHTML = `
-                    <p class="text-green-600 font-semibold mb-4">Markah anda telah berjaya dihantar!</p>
-                    <button id="view-leaderboard-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Lihat Papan Markah</button>
-                    <button id="reset-btn" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">Cuba Lagi</button>
+                
+                overallResultsContainer.innerHTML = `
+                     <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+                        <p class="text-green-600 font-semibold mb-4 text-xl">Markah anda telah berjaya dihantar!</p>
+                        <button id="view-leaderboard-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Lihat Papan Markah</button>
+                     </div>
                 `;
                 document.getElementById('view-leaderboard-btn').onclick = () => showView('leaderboard');
-                document.getElementById('reset-btn').onclick = startQuizApp;
 
             } catch (error) {
                 console.error("Error saving score to Google Sheets:", error);
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Hantar Markah';
-                resultsActions.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
+                submitBtn.textContent = 'Hantar Markah ke Papan Markah';
+                overallResultsContainer.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
             }
         }
 
         async function showLeaderboardFromGoogleSheets() {
-            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+             if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
                 leaderboardContent.innerHTML = `<p class="text-red-500">Papan markah tidak dapat dimuatkan. Sila konfigurasikan URL Google Sheets Web App.</p>`;
                 return;
             }
@@ -320,25 +464,30 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL);
                 const scores = await response.json();
 
-                // Data is already sorted by the Apps Script
-                
                 if (scores.length === 0) {
                     leaderboardContent.innerHTML = `<p>Tiada markah lagi. Jadilah yang pertama!</p>`;
                     return;
                 }
-
+                
                 let tableHtml = `
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ked.</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Markah</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ked.</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
+                `;
+                // Dynamically create headers for sections
+                quizData.forEach((_, index) => {
+                     tableHtml += `<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bhg. ${index + 1}</th>`;
+                });
+                tableHtml += `
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Markah</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                 `;
+
                 scores.forEach((entry, index) => {
                     let rankIcon = index + 1;
                     if (index === 0) rankIcon = '🏆';
@@ -347,10 +496,18 @@
 
                     tableHtml += `
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold">${rankIcon}</td>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
-                            <td class="px-6 py-4 whitespace-nowrap font-bold text-blue-600">${entry.score} / ${entry.totalQuestions}</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-lg font-bold">${rankIcon}</td>
+                            <td class="px-4 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
+                    `;
+                    // Dynamically add scores for each section
+                    quizData.forEach((sectionData, secIndex) => {
+                        const score = entry[`score_section_${secIndex}`] ?? '-';
+                        const total = sectionData.questions.length;
+                        tableHtml += `<td class="px-4 py-4 whitespace-nowrap text-center text-gray-600">${score}/${total}</td>`;
+                    });
+                     tableHtml += `
+                            <td class="px-4 py-4 whitespace-nowrap font-bold text-blue-600">${entry.totalScore} / ${entry.totalQuestions}</td>
                         </tr>
                     `;
                 });
@@ -403,130 +560,9 @@
             button.style.display = 'none';
         }
 
-        function handleAnswerClick(button, option, question, optionsContainer, geminiContainer) {
-            optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            if (option === question.answer) {
-                button.classList.add('correct');
-                score++;
-            } else {
-                button.classList.add('incorrect');
-                optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
-                    if (btn.textContent === question.answer) btn.classList.add('correct');
-                });
-            }
-            answeredQuestions++;
-            updateScore();
-            geminiContainer.style.display = 'block';
-
-            if (answeredQuestions === totalQuestions) {
-                resultsActions.innerHTML = `<button id="submit-score-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Hantar Markah</button>`;
-                document.getElementById('submit-score-btn').onclick = saveScoreToGoogleSheets;
-            }
-        }
-
         function startQuizApp() {
-            quizContainer.innerHTML = '';
-            menuContainer.innerHTML = '';
-            homeGrid.innerHTML = '';
-            resultsActions.innerHTML = `<p class="text-gray-500">Selesaikan semua soalan untuk menghantar markah.</p>`;
-            score = 0;
-            totalQuestions = 0;
-            answeredQuestions = 0;
-
-            const homeMenuBtn = document.createElement('a');
-            homeMenuBtn.href = "#";
-            homeMenuBtn.textContent = '🏠 Halaman Utama';
-            homeMenuBtn.className = 'menu-btn';
-            homeMenuBtn.dataset.target = 'home';
-            homeMenuBtn.onclick = (e) => { e.preventDefault(); showView('home'); };
-            menuContainer.appendChild(homeMenuBtn);
-            
-            const leaderboardMenuBtn = document.createElement('a');
-            leaderboardMenuBtn.href = "#";
-            leaderboardMenuBtn.textContent = '🏆 Papan Markah';
-            leaderboardMenuBtn.className = 'menu-btn';
-            leaderboardMenuBtn.dataset.target = 'leaderboard';
-            leaderboardMenuBtn.onclick = (e) => { e.preventDefault(); showView('leaderboard'); };
-            menuContainer.appendChild(leaderboardMenuBtn);
-
-            const menuSeparator = document.createElement('hr');
-            menuSeparator.className = 'my-2';
-            menuContainer.appendChild(menuSeparator);
-
-            quizData.forEach((section, sectionIndex) => {
-                const sectionId = `section-${sectionIndex}`;
-                
-                const homeCard = document.createElement('a');
-                homeCard.href = `#${sectionId}`;
-                homeCard.className = 'block bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all';
-                homeCard.innerHTML = `
-                    <h3 class="font-bold text-lg text-blue-600">Bahagian ${sectionIndex + 1}</h3>
-                    <p class="text-gray-700 mt-1">${section.section.split(': ')[1]}</p>
-                `;
-                homeCard.onclick = (e) => { showView('quiz'); };
-                homeGrid.appendChild(homeCard);
-
-                const menuBtn = document.createElement('a');
-                menuBtn.href = `#${sectionId}`;
-                menuBtn.textContent = `Bahagian ${sectionIndex + 1}`;
-                menuBtn.className = 'menu-btn';
-                menuBtn.onclick = () => showView('quiz');
-                menuContainer.appendChild(menuBtn);
-
-                const sectionWrapper = document.createElement('section');
-                sectionWrapper.id = sectionId;
-                sectionWrapper.className = 'scroll-mt-24';
-                const sectionTitle = document.createElement('h2');
-                sectionTitle.className = 'text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6';
-                sectionTitle.textContent = section.section;
-                sectionWrapper.appendChild(sectionTitle);
-                const sectionContainer = document.createElement('div');
-                sectionContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-6';
-
-                section.questions.forEach((q) => {
-                    totalQuestions++;
-                    const questionCard = document.createElement('div');
-                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col';
-                    const questionText = document.createElement('p');
-                    questionText.className = 'arabic-text text-center mb-5 text-2xl flex-grow';
-                    questionText.textContent = q.question + ".";
-                    const optionsContainer = document.createElement('div');
-                    optionsContainer.className = 'flex justify-center items-center gap-4';
-                    const geminiFeatureContainer = document.createElement('div');
-                    geminiFeatureContainer.className = 'mt-4 text-center';
-                    geminiFeatureContainer.style.display = 'none';
-                    const geminiBtn = document.createElement('button');
-                    geminiBtn.className = 'gemini-btn font-semibold py-2 px-5 rounded-lg shadow-md transition-colors duration-300';
-                    geminiBtn.textContent = '✨ Buat Ayat';
-                    const geminiResultContainer = document.createElement('div');
-                    geminiResultContainer.className = 'gemini-result';
-                    geminiBtn.onclick = () => handleGeminiClick(q.question, geminiBtn, geminiResultContainer);
-                    geminiFeatureContainer.appendChild(geminiBtn);
-                    geminiFeatureContainer.appendChild(geminiResultContainer);
-
-                    q.options.forEach(option => {
-                        const button = document.createElement('button');
-                        button.textContent = option;
-                        button.className = 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                        button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer, geminiFeatureContainer));
-                        optionsContainer.appendChild(button);
-                    });
-                    questionCard.appendChild(questionText);
-                    questionCard.appendChild(optionsContainer);
-                    questionCard.appendChild(geminiFeatureContainer);
-                    sectionContainer.appendChild(questionCard);
-                });
-                sectionWrapper.appendChild(sectionContainer);
-                quizContainer.appendChild(sectionWrapper);
-            });
-
-            updateScore();
-            totalQuestionsEl.textContent = totalQuestions;
+            initializeScores();
             showView('home');
-        }
-        
-        function updateScore() {
-            scoreEl.textContent = score;
         }
 
         // Start the app after the page loads
