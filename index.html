@@ -33,26 +33,6 @@
             cursor: not-allowed;
             opacity: 0.9;
         }
-        .gemini-btn {
-            background-color: #8b5cf6;
-            color: white;
-        }
-        .gemini-btn:hover {
-            background-color: #7c3aed;
-        }
-        .gemini-btn:disabled {
-            background-color: #a78bfa;
-            cursor: wait;
-        }
-        .gemini-result {
-            direction: ltr;
-            text-align: left;
-            background-color: #f3f4f6;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            border: 1px solid #e5e7eb;
-        }
         .menu-btn {
             display: block;
             width: 100%;
@@ -160,50 +140,50 @@
             {
                 section: "Bahagian 1: Pilih إِسْم إِشَارَة (Isim Isyarah) Dekat yang Betul",
                 questions: [
-                    { question: "فُرْشَاةُ الْأَسْنَانِ", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
-                    { question: "مَعْجُونُ الْأَسْنَانِ", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
-                    { question: "صَابُونٌ", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
-                    { question: "شَامْبُو", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
-                    { question: "مِقْلَمَةُ الْأَظَافِرِ", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
-                    { question: "مَغْسَلَةٌ", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
-                    { question: "سَلَّةُ الْمُهْمَلَاتِ", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
-                    { question: "مِنْشَفَةٌ", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
-                    { question: "دَلْوٌ", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" }
+                    { question: "فُرْشَاةُ الْأَسْنَانِ", translation: "Berus gigi", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
+                    { question: "مَعْجُونُ الْأَسْنَانِ", translation: "Ubat gigi", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
+                    { question: "صَابُونٌ", translation: "Sabun", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
+                    { question: "شَامْبُو", translation: "Syampu", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" },
+                    { question: "مِقْلَمَةُ الْأَظَافِرِ", translation: "Pengetip kuku", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
+                    { question: "مَغْسَلَةٌ", translation: "Sinki", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
+                    { question: "سَلَّةُ الْمُهْمَلَاتِ", translation: "Tong sampah", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
+                    { question: "مِنْشَفَةٌ", translation: "Tuala", options: ["هَذَا", "هَذِهِ"], answer: "هَذِهِ" },
+                    { question: "دَلْوٌ", translation: "Baldi", options: ["هَذَا", "هَذِهِ"], answer: "هَذَا" }
                 ]
             },
             {
                 section: "Bahagian 2: Pilih Jantina (الْمُذَكَّرُ / الْمُؤَنَّثُ) yang Betul",
                 questions: [
-                    { question: "مُضِيفَةٌ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "مُمَرِّضَةٌ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "صَحَفِيٌّ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "طَبَّاخٌ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "جُنْدِيٌّ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "إِطْفَائِيٌّ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَkَّرُ" },
-                    { question: "طَبِيبَةٌ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "مُحَاضِرَةٌ", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
+                    { question: "مُضِيفَةٌ", translation: "Pramugari", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "صَحَفِيٌّ", translation: "Wartawan", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
+                    { question: "طَبَّاخٌ", translation: "Tukang masak", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
+                    { question: "جُنْدِيٌّ", translation: "Askar", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
+                    { question: "إِطْفَائِيٌّ", translation: "Ahli bomba", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
+                    { question: "طَبِيبَةٌ", translation: "Doktor", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُحَاضِرَةٌ", translation: "Pensyarah", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
                 ]
             },
             {
                 section: "Bahagian 3: Pilih إِسْم إِشَارَة (Isim Isyarah) Jauh yang Betul",
                 questions: [
-                    { question: "حَافِلَةٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
-                    { question: "سَيَّارَةٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
-                    { question: "قَارِبٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "ذَلِكَ" },
-                    { question: "قِطَارٌ كَهْرَبَائِيٌّ", options: ["ذَلِكَ", "تِلْكَ"], answer: "ذَلِكَ" },
-                    { question: "شَاحِنَةٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
-                    { question: "طَائِرَةٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
-                    { question: "مِرْوَحِيَّةٌ", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" }
+                    { question: "حَافِلَةٌ", translation: "Bas", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "سَيَّارَةٌ", translation: "Kereta", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "قَارِبٌ", translation: "Bot", options: ["ذَلِكَ", "تِلْكَ"], answer: "ذَلِكَ" },
+                    { question: "قِطَارٌ كَهْرَبَائِيٌّ", translation: "Kereta api elektrik", options: ["ذَلِكَ", "تِلْكَ"], answer: "ذَلِكَ" },
+                    { question: "شَاحِنَةٌ", translation: "Lori", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "طَائِرَةٌ", translation: "Kapal terbang", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "مِرْوَحِيَّةٌ", translation: "Helikopter", options: ["ذَلِكَ", "تِلْكَ"], answer: "تِلْكَ" }
                 ]
             },
             {
                 section: "Bahagian 4: Pilih الضَّمِيرُ (Dhomir) yang Sesuai",
                 questions: [
-                    { question: "مَلَايُوِيٌّ", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتَ" },
-                    { question: "صِينِيَّةٌ", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتِ" },
-                    { question: "هِنْدِيٌّ", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتَ" },
-                    { question: "مُوَاطِنٌ أَصْلِيٌّ", options: ["هُوَ", "هِيَ"], answer: "هُوَ" },
-                    { question: "طَائِرَةٌ", options: ["هُوَ", "هِيَ"], answer: "هِيَ" }
+                    { question: "مَلَايُوِيٌّ", translation: "Orang Melayu", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتَ" },
+                    { question: "صِينِيَّةٌ", translation: "Orang Cina", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتِ" },
+                    { question: "هِنْدِيٌّ", translation: "Orang India", options: ["أَنْتَ", "أَنْتِ"], answer: "أَنْتَ" },
+                    { question: "مُوَاطِنٌ أَصْلِيٌّ", translation: "Orang Asli", options: ["هُوَ", "هِيَ"], answer: "هُوَ" },
+                    { question: "طَائِرَةٌ", translation: "Kapal terbang", options: ["هُوَ", "هِيَ"], answer: "هِيَ" }
                 ]
             }
         ];
@@ -345,39 +325,34 @@
 
             sectionData.questions.forEach(q => {
                 const questionCard = document.createElement('div');
-                questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col';
+                questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col items-center';
                 const questionText = document.createElement('p');
-                questionText.className = 'arabic-text text-center mb-5 text-2xl flex-grow';
-                questionText.textContent = q.question + ".";
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'flex justify-center items-center gap-4';
-                const geminiFeatureContainer = document.createElement('div');
-                geminiFeatureContainer.className = 'mt-4 text-center';
-                geminiFeatureContainer.style.display = 'none';
-                const geminiBtn = document.createElement('button');
-                geminiBtn.className = 'gemini-btn font-semibold py-2 px-5 rounded-lg shadow-md transition-colors duration-300';
-                geminiBtn.textContent = 'Lihat terjemahan dan contoh ayat';
-                const geminiResultContainer = document.createElement('div');
-                geminiResultContainer.className = 'gemini-result';
-                geminiBtn.onclick = () => handleGeminiClick(q.question, geminiBtn, geminiResultContainer);
-                geminiFeatureContainer.appendChild(geminiBtn);
-                geminiFeatureContainer.appendChild(geminiResultContainer);
+                questionText.className = 'arabic-text text-center text-2xl';
+                questionText.textContent = q.question;
+                
+                const translationText = document.createElement('p');
+                translationText.className = 'text-center text-gray-500 mb-5 text-md italic';
+                translationText.textContent = `(${q.translation})`;
 
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'flex justify-center items-center gap-4 mt-auto';
+                
                 q.options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
                     button.className = 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                    button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer, geminiFeatureContainer));
+                    button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer));
                     optionsContainer.appendChild(button);
                 });
+                
                 questionCard.appendChild(questionText);
+                questionCard.appendChild(translationText);
                 questionCard.appendChild(optionsContainer);
-                questionCard.appendChild(geminiFeatureContainer);
                 quizContent.appendChild(questionCard);
             });
         }
 
-        function handleAnswerClick(button, option, question, optionsContainer, geminiContainer) {
+        function handleAnswerClick(button, option, question, optionsContainer) {
             optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
             if (option === question.answer) {
                 button.classList.add('correct');
@@ -389,7 +364,6 @@
                 });
             }
             answeredInSection++;
-            geminiContainer.style.display = 'block';
             
             const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
             if (answeredInSection === totalQuestionsInSection) {
@@ -428,7 +402,6 @@
             };
 
             try {
-                // Using POST with 'no-cors' mode as a simple way to send data to Apps Script
                  await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -477,7 +450,6 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
                 `;
-                // Dynamically create headers for sections
                 quizData.forEach((_, index) => {
                      tableHtml += `<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bhg. ${index + 1}</th>`;
                 });
@@ -500,7 +472,6 @@
                             <td class="px-4 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
                             <td class="px-4 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
                     `;
-                    // Dynamically add scores for each section
                     quizData.forEach((sectionData, secIndex) => {
                         const score = entry[`score_section_${secIndex}`] ?? '-';
                         const total = sectionData.questions.length;
@@ -520,65 +491,11 @@
             }
         }
         
-        async function getSentenceFromGemini(word) {
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const systemPrompt = "Anda ialah seorang guru Bahasa Arab. Matlamat anda adalah untuk membantu pelajar yang berbahasa Melayu mempelajari kosa kata Bahasa Arab.";
-            const userQuery = `Berikan terjemahan Bahasa Melayu untuk perkataan Arab "${word}". Sertakan juga satu contoh ayat yang mudah menggunakan perkataan itu berserta terjemahannya. PENTING: Pastikan contoh ayat Arab mempunyai baris/harakat yang lengkap. Berikan jawapan dalam format JSON dengan kunci "wordTranslation", "arabicSentence", dan "malayTranslation".`;
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: {
-                  responseMimeType: "application/json",
-                  responseSchema: {
-                      type: "OBJECT",
-                      properties: { 
-                          "wordTranslation": { "type": "STRING" }, 
-                          "arabicSentence": { "type": "STRING" }, 
-                          "malayTranslation": { "type": "STRING" } 
-                      },
-                      required: ["wordTranslation", "arabicSentence", "malayTranslation"]
-                  }
-                }
-            };
-            try {
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const result = await response.json();
-                const candidate = result.candidates?.[0];
-                if (candidate?.content?.parts?.[0]?.text) {
-                    return JSON.parse(candidate.content.parts[0].text);
-                }
-                throw new Error("Invalid response structure from API.");
-            } catch (error) {
-                console.error("Error calling Gemini API:", error);
-                return { 
-                    wordTranslation: "Ralat",
-                    arabicSentence: "Maaf, berlaku ralat semasa menjana terjemahan.", 
-                    malayTranslation: "Sila cuba lagi." 
-                };
-            }
-        }
-        
-        async function handleGeminiClick(word, button, resultContainer) {
-            button.disabled = true;
-            button.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memuatkan...`;
-            const data = await getSentenceFromGemini(word);
-            resultContainer.innerHTML = `
-                <p class="text-md text-left"><strong>Terjemahan:</strong> ${data.wordTranslation}</p>
-                <hr class="my-2">
-                <p class="arabic-text font-semibold text-lg">${data.arabicSentence}</p>
-                <p class="text-sm text-gray-600 mt-1 text-left">${data.malayTranslation}</p>
-            `;
-            button.style.display = 'none';
-        }
-
         function startQuizApp() {
             initializeScores();
             showView('home');
         }
 
-        // Start the app after the page loads
         document.addEventListener('DOMContentLoaded', () => {
              // The login form is shown by default
         });
