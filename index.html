@@ -160,8 +160,8 @@
                     { question: "طَبَّاخٌ", translation: "Tukang masak", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
                     { question: "جُنْدِيٌّ", translation: "Askar", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
                     { question: "إِطْفَائِيٌّ", translation: "Ahli bomba", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "طَبِيبَةٌ", translation: "Doktor", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "مُحَاضِرَةٌ", translation: "Pensyarah", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
+                    { question: "طَبِيبَةٌ", translation: "Doktor", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُحَاضِرَةٌ", translation: "Pensyarah", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
                 ]
             },
             {
@@ -189,7 +189,7 @@
         ];
 
         // --- Google Sheet Web App URL ---
-        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec';
+        const GOOGLE_SHEET_WEB_APP_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
 
         // --- Element References ---
         const loginContainer = document.getElementById('login-container');
@@ -382,7 +382,7 @@
         }
         
         async function saveScoreToGoogleSheets() {
-            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+            if (GOOGLE_SHEET_WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec') {
                 overallResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
                 return;
             }
