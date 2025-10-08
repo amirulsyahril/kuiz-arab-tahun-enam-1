@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz Bahasa Arab Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .arabic-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            direction: rtl; 
+            text-align: right;
+        }
+        .option-btn.correct {
+            background-color: #22c55e;
+            color: white;
+            border-color: #16a34a;
+        }
+        .option-btn.incorrect {
+            background-color: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        .gemini-btn {
+            background-color: #8b5cf6;
+            color: white;
+        }
+        .gemini-btn:hover {
+            background-color: #7c3aed;
+        }
+        .gemini-btn:disabled {
+            background-color: #a78bfa;
+            cursor: wait;
+        }
+        .gemini-result {
+            direction: ltr;
+            text-align: left;
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border: 1px solid #e5e7eb;
+        }
+        .menu-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+        .menu-btn:hover {
+            background-color: #e5e7eb;
+        }
+        .menu-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .trophy-gold { color: #ffd700; }
+        .trophy-silver { color: #c0c0c0; }
+        .trophy-bronze { color: #cd7f32; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Login Page -->
+    <div id="login-container" class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md m-4">
+            <h1 class="text-3xl font-bold text-blue-600 mb-2 text-center">Selamat Datang</h1>
+            <p class="text-center text-gray-500 mb-6">Sila masukkan butiran anda untuk bermula.</p>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
+                    <input type="text" id="fullName" name="fullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="schoolName" class="block text-sm font-medium text-gray-700">Nama Sekolah</label>
+                    <input type="text" id="schoolName" name="schoolName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Masuk Latihan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="main-app-container" class="hidden flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Menu -->
+        <aside class="w-full md:w-64 bg-white p-4 shadow-lg md:h-screen md:sticky top-0">
+            <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Menu</h2>
+            <nav id="menu-container" class="space-y-2">
+                <!-- Menu buttons will be inserted here by JS -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Kuiz Bahasa Arab</h1>
+                <div id="user-info" class="mt-2 text-gray-600">
+                    <!-- User info will be inserted here -->
+                </div>
+            </header>
+
+            <!-- Home Screen -->
+            <div id="home-container">
+                 <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6">Senarai Bahagian</h2>
+                 <div id="home-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Home section cards will be inserted here -->
+                 </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <main id="quiz-container" class="space-y-12" style="display: none;">
+                <!-- Questions will be dynamically inserted here -->
+            </main>
+            
+            <!-- Leaderboard Screen -->
+            <div id="leaderboard-container" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6">Papan Markah</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div id="leaderboard-content" class="overflow-x-auto">
+                        <!-- Leaderboard table will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-container" class="mt-12 text-center" style="display: none;">
+                <div class="score-card bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4">Keputusan</h2>
+                    <p class="text-xl">Skor Anda: <span id="score" class="font-bold text-blue-600">0</span> / <span id="total-questions" class="font-bold">0</span></p>
+                    <div id="results-actions" class="mt-6 space-x-4">
+                       <!-- Action buttons appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                section: "Bahagian 1: Pilih إسم إشارة (Isim Isyarah) yang Betul",
+                questions: [
+                    { question: "فُرْشَاةُ الأَسْنَانِ", options: ["هذا", "هذه"], answer: "هذه" },
+                    { question: "مَعْجُونُ الأَسْنَانِ", options: ["هذا", "هذه"], answer: "هذا" },
+                    { question: "صَابُون", options: ["هذا", "هذه"], answer: "هذا" },
+                    { question: "شَامْبُو", options: ["هذا", "هذه"], answer: "هذا" },
+                    { question: "مِقْلَمَةُ الأَظافِرِ", options: ["هذا", "هذه"], answer: "هذه" },
+                    { question: "مَغْسَلَةٌ", options: ["هذا", "هذه"], answer: "هذه" },
+                    { question: "سَلَّةُ المُهْمَلَاتِ", options: ["هذا", "هذه"], answer: "هذه" },
+                    { question: "مِنْشَفَة", options: ["هذا", "هذه"], answer: "هذه" },
+                    { question: "دَلْو", options: ["هذا", "هذه"], answer: "هذا" }
+                ]
+            },
+            {
+                section: "Bahagian 2: Pilih Jantina (المذكر / المُؤنَّتْ) yang Betul",
+                questions: [
+                    { question: "مُضِيفَة", options: ["المذكر", "المُؤنَّتْ"], answer: "المُؤنَّتْ" },
+                    { question: "مُمَرِّضَةٌ", options: ["المذكر", "المُؤنَّتْ"], answer: "المُؤنَّتْ" },
+                    { question: "صَحَفِيّ", options: ["المذكر", "المُؤنَّتْ"], answer: "المذكر" },
+                    { question: "طَبَّاخ", options: ["المذكر", "المُؤنَّتْ"], answer: "المذكر" },
+                    { question: "جُنْدِيّ", options: ["المذكر", "المُؤنَّتْ"], answer: "المذكر" },
+                    { question: "إِطْفَائِيّ", options: ["المذكر", "المُؤنَّتْ"], answer: "المذكر" },
+                    { question: "طَبِيبَةٌ", options: ["المذكر", "المُؤنَّتْ"], answer: "المُؤنَّتْ" },
+                    { question: "مُحَاضِرَةٌ", options: ["المذكر", "المُؤنَّتْ"], answer: "المُؤنَّتْ" }
+                ]
+            },
+            {
+                section: "Bahagian 3: Pilih إسم إشارة (Isim Isyarah) Jauh yang Betul",
+                questions: [
+                    { question: "حَافِلَةٌ", options: ["ذلك", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "سَيَّارَة", options: ["ذلك", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "قَارِبٌ", options: ["ذلك", "تِلْكَ"], answer: "ذلك" },
+                    { question: "قِطَارٌ كَهْرَبَائِيّ", options: ["ذلك", "تِلْكَ"], answer: "ذلك" },
+                    { question: "شَاحِنَةٌ", options: ["ذلك", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "طَائِرَة", options: ["ذلك", "تِلْكَ"], answer: "تِلْكَ" },
+                    { question: "مِرْوَحيَّةٌ", options: ["ذلك", "تِلْكَ"], answer: "تِلْكَ" }
+                ]
+            },
+            {
+                section: "Bahagian 4: Pilih الضمير (Dhomir) yang Sesuai",
+                questions: [
+                    { question: "مَلَايُوِيّ", options: ["أَنْتَ", "أنتِ"], answer: "أَنْتَ" },
+                    { question: "صِينِيَّة", options: ["أَنْتَ", "أنتِ"], answer: "أنتِ" },
+                    { question: "هِنْدِيّ", options: ["أَنْتَ", "أنتِ"], answer: "أَنْتَ" },
+                    { question: "مُوَاطِنٌ أَصْلِيّ", options: ["هُوَ", "هي"], answer: "هُوَ" },
+                    { question: "طَائِرَة", options: ["هُوَ", "هي"], answer: "هي" }
+                ]
+            }
+        ];
+
+        // --- Google Sheet Web App URL ---
+        // PENTING: Gantikan URL di bawah dengan URL Web App Google Apps Script anda sendiri.
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec';
+
+        // --- Element References ---
+        const loginContainer = document.getElementById('login-container');
+        const mainAppContainer = document.getElementById('main-app-container');
+        const loginForm = document.getElementById('login-form');
+        const userInfo = document.getElementById('user-info');
+        const homeContainer = document.getElementById('home-container');
+        const homeGrid = document.getElementById('home-grid');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const resultsActions = document.getElementById('results-actions');
+        const leaderboardContainer = document.getElementById('leaderboard-container');
+        const leaderboardContent = document.getElementById('leaderboard-content');
+        const menuContainer = document.getElementById('menu-container');
+        const scoreEl = document.getElementById('score');
+        const totalQuestionsEl = document.getElementById('total-questions');
+
+        let score = 0;
+        let totalQuestions = 0;
+        let answeredQuestions = 0;
+        let currentFullName = '';
+        let currentSchoolName = '';
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentFullName = document.getElementById('fullName').value;
+            currentSchoolName = document.getElementById('schoolName').value;
+
+            if(currentFullName.trim() && currentSchoolName.trim()) {
+                userInfo.innerHTML = `<p class="font-semibold">${currentFullName}</p><p class="text-sm">${currentSchoolName}</p>`;
+                loginContainer.style.display = 'none';
+                mainAppContainer.className = 'flex flex-col md:flex-row min-h-screen';
+                startQuizApp();
+            }
+        });
+
+        function showView(viewName) {
+            homeContainer.style.display = 'none';
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
+            leaderboardContainer.style.display = 'none';
+            
+            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (viewName === 'home') {
+                homeContainer.style.display = 'block';
+                document.querySelector('.menu-btn[data-target="home"]')?.classList.add('active');
+            } else if (viewName === 'quiz') {
+                quizContainer.style.display = 'block';
+                resultsContainer.style.display = 'block';
+            } else if (viewName === 'leaderboard') {
+                leaderboardContainer.style.display = 'block';
+                document.querySelector('.menu-btn[data-target="leaderboard"]')?.classList.add('active');
+                showLeaderboardFromGoogleSheets();
+            }
+        }
+
+        async function saveScoreToGoogleSheets() {
+             if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                resultsActions.innerHTML = `<p class="text-red-500">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
+                return;
+            }
+            const submitBtn = document.getElementById('submit-score-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Menyimpan...';
+
+            const data = {
+                fullName: currentFullName,
+                schoolName: currentSchoolName,
+                score: score,
+                totalQuestions: totalQuestions
+            };
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Required for simple POST requests to Apps Script
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                // NOTE: With 'no-cors', we can't read the response. We assume it's successful.
+                resultsActions.innerHTML = `
+                    <p class="text-green-600 font-semibold mb-4">Markah anda telah berjaya dihantar!</p>
+                    <button id="view-leaderboard-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Lihat Papan Markah</button>
+                    <button id="reset-btn" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">Cuba Lagi</button>
+                `;
+                document.getElementById('view-leaderboard-btn').onclick = () => showView('leaderboard');
+                document.getElementById('reset-btn').onclick = startQuizApp;
+
+            } catch (error) {
+                console.error("Error saving score to Google Sheets:", error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Hantar Markah';
+                resultsActions.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
+            }
+        }
+
+        async function showLeaderboardFromGoogleSheets() {
+            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                leaderboardContent.innerHTML = `<p class="text-red-500">Papan markah tidak dapat dimuatkan. Sila konfigurasikan URL Google Sheets Web App.</p>`;
+                return;
+            }
+            leaderboardContent.innerHTML = `<p>Memuatkan markah...</p>`;
+            try {
+                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL);
+                const scores = await response.json();
+
+                // Data is already sorted by the Apps Script
+                
+                if (scores.length === 0) {
+                    leaderboardContent.innerHTML = `<p>Tiada markah lagi. Jadilah yang pertama!</p>`;
+                    return;
+                }
+
+                let tableHtml = `
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ked.</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Markah</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                `;
+                scores.forEach((entry, index) => {
+                    let rankIcon = index + 1;
+                    if (index === 0) rankIcon = '🏆';
+                    if (index === 1) rankIcon = '🥈';
+                    if (index === 2) rankIcon = '🥉';
+
+                    tableHtml += `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold">${rankIcon}</td>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-blue-600">${entry.score} / ${entry.totalQuestions}</td>
+                        </tr>
+                    `;
+                });
+                tableHtml += `</tbody></table>`;
+                leaderboardContent.innerHTML = tableHtml;
+
+            } catch (error) {
+                console.error("Error fetching scores from Google Sheets:", error);
+                leaderboardContent.innerHTML = `<p class="text-red-500">Tidak dapat memuatkan papan markah. Sila pastikan URL dan kebenaran adalah betul.</p>`;
+            }
+        }
+        
+        async function getSentenceFromGemini(word) {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const systemPrompt = "Anda ialah seorang guru Bahasa Arab. Matlamat anda adalah untuk membantu pelajar yang berbahasa Melayu mempelajari kosa kata Bahasa Arab.";
+            const userQuery = `Tolong cipta satu ayat Arab yang mudah menggunakan perkataan "${word}". Sertakan juga terjemahan dalam Bahasa Melayu. Berikan jawapan dalam format JSON dengan kunci "arabicSentence" dan "malayTranslation". Ayat itu mestilah sesuai untuk pemula.`;
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                  responseMimeType: "application/json",
+                  responseSchema: {
+                      type: "OBJECT",
+                      properties: { "arabicSentence": { "type": "STRING" }, "malayTranslation": { "type": "STRING" } },
+                      required: ["arabicSentence", "malayTranslation"]
+                  }
+                }
+            };
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                if (candidate?.content?.parts?.[0]?.text) {
+                    return JSON.parse(candidate.content.parts[0].text);
+                }
+                throw new Error("Invalid response structure from API.");
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return { arabicSentence: "Maaf, berlaku ralat semasa menjana ayat.", malayTranslation: "Sila cuba lagi." };
+            }
+        }
+        
+        async function handleGeminiClick(word, button, resultContainer) {
+            button.disabled = true;
+            button.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Menjana...`;
+            const data = await getSentenceFromGemini(word);
+            resultContainer.innerHTML = `<p class="arabic-text font-semibold text-lg">${data.arabicSentence}</p><p class="text-sm text-gray-600 mt-1">${data.malayTranslation}</p>`;
+            button.style.display = 'none';
+        }
+
+        function handleAnswerClick(button, option, question, optionsContainer, geminiContainer) {
+            optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            if (option === question.answer) {
+                button.classList.add('correct');
+                score++;
+            } else {
+                button.classList.add('incorrect');
+                optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.textContent === question.answer) btn.classList.add('correct');
+                });
+            }
+            answeredQuestions++;
+            updateScore();
+            geminiContainer.style.display = 'block';
+
+            if (answeredQuestions === totalQuestions) {
+                resultsActions.innerHTML = `<button id="submit-score-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Hantar Markah</button>`;
+                document.getElementById('submit-score-btn').onclick = saveScoreToGoogleSheets;
+            }
+        }
+
+        function startQuizApp() {
+            quizContainer.innerHTML = '';
+            menuContainer.innerHTML = '';
+            homeGrid.innerHTML = '';
+            resultsActions.innerHTML = `<p class="text-gray-500">Selesaikan semua soalan untuk menghantar markah.</p>`;
+            score = 0;
+            totalQuestions = 0;
+            answeredQuestions = 0;
+
+            const homeMenuBtn = document.createElement('a');
+            homeMenuBtn.href = "#";
+            homeMenuBtn.textContent = '🏠 Halaman Utama';
+            homeMenuBtn.className = 'menu-btn';
+            homeMenuBtn.dataset.target = 'home';
+            homeMenuBtn.onclick = (e) => { e.preventDefault(); showView('home'); };
+            menuContainer.appendChild(homeMenuBtn);
+            
+            const leaderboardMenuBtn = document.createElement('a');
+            leaderboardMenuBtn.href = "#";
+            leaderboardMenuBtn.textContent = '🏆 Papan Markah';
+            leaderboardMenuBtn.className = 'menu-btn';
+            leaderboardMenuBtn.dataset.target = 'leaderboard';
+            leaderboardMenuBtn.onclick = (e) => { e.preventDefault(); showView('leaderboard'); };
+            menuContainer.appendChild(leaderboardMenuBtn);
+
+            const menuSeparator = document.createElement('hr');
+            menuSeparator.className = 'my-2';
+            menuContainer.appendChild(menuSeparator);
+
+            quizData.forEach((section, sectionIndex) => {
+                const sectionId = `section-${sectionIndex}`;
+                
+                const homeCard = document.createElement('a');
+                homeCard.href = `#${sectionId}`;
+                homeCard.className = 'block bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all';
+                homeCard.innerHTML = `
+                    <h3 class="font-bold text-lg text-blue-600">Bahagian ${sectionIndex + 1}</h3>
+                    <p class="text-gray-700 mt-1">${section.section.split(': ')[1]}</p>
+                `;
+                homeCard.onclick = (e) => { showView('quiz'); };
+                homeGrid.appendChild(homeCard);
+
+                const menuBtn = document.createElement('a');
+                menuBtn.href = `#${sectionId}`;
+                menuBtn.textContent = `Bahagian ${sectionIndex + 1}`;
+                menuBtn.className = 'menu-btn';
+                menuBtn.onclick = () => showView('quiz');
+                menuContainer.appendChild(menuBtn);
+
+                const sectionWrapper = document.createElement('section');
+                sectionWrapper.id = sectionId;
+                sectionWrapper.className = 'scroll-mt-24';
+                const sectionTitle = document.createElement('h2');
+                sectionTitle.className = 'text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6';
+                sectionTitle.textContent = section.section;
+                sectionWrapper.appendChild(sectionTitle);
+                const sectionContainer = document.createElement('div');
+                sectionContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+
+                section.questions.forEach((q) => {
+                    totalQuestions++;
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col';
+                    const questionText = document.createElement('p');
+                    questionText.className = 'arabic-text text-center mb-5 text-2xl flex-grow';
+                    questionText.textContent = q.question + ".";
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'flex justify-center items-center gap-4';
+                    const geminiFeatureContainer = document.createElement('div');
+                    geminiFeatureContainer.className = 'mt-4 text-center';
+                    geminiFeatureContainer.style.display = 'none';
+                    const geminiBtn = document.createElement('button');
+                    geminiBtn.className = 'gemini-btn font-semibold py-2 px-5 rounded-lg shadow-md transition-colors duration-300';
+                    geminiBtn.textContent = '✨ Buat Ayat';
+                    const geminiResultContainer = document.createElement('div');
+                    geminiResultContainer.className = 'gemini-result';
+                    geminiBtn.onclick = () => handleGeminiClick(q.question, geminiBtn, geminiResultContainer);
+                    geminiFeatureContainer.appendChild(geminiBtn);
+                    geminiFeatureContainer.appendChild(geminiResultContainer);
+
+                    q.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option;
+                        button.className = 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
+                        button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer, geminiFeatureContainer));
+                        optionsContainer.appendChild(button);
+                    });
+                    questionCard.appendChild(questionText);
+                    questionCard.appendChild(optionsContainer);
+                    questionCard.appendChild(geminiFeatureContainer);
+                    sectionContainer.appendChild(questionCard);
+                });
+                sectionWrapper.appendChild(sectionContainer);
+                quizContainer.appendChild(sectionWrapper);
+            });
+
+            updateScore();
+            totalQuestionsEl.textContent = totalQuestions;
+            showView('home');
+        }
+        
+        function updateScore() {
+            scoreEl.textContent = score;
+        }
+
+        // Start the app after the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+             // The login form is shown by default
+        });
+    </script>
+</body>
+</html>
+
