@@ -62,9 +62,20 @@
     <!-- Login Page -->
     <div id="login-container" class="flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md m-4">
-            <h1 class="text-3xl font-bold text-blue-600 mb-2 text-center">Selamat Datang</h1>
-            <p class="text-center text-gray-500 mb-6">Sila masukkan butiran anda untuk bermula.</p>
+            <h1 class="text-3xl font-bold text-blue-600 mb-4 text-center">Laman Kuiz Bahasa Arab Interaktif</h1>
+            
+            <div class="mb-6 text-sm text-gray-600">
+                <h3 class="font-semibold text-center mb-3 text-gray-700">Kandungan Kuiz:</h3>
+                <ul class="list-none space-y-2 text-center">
+                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 1: Isim Isyarah (Dekat)</li>
+                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 2: Jantina (Muzakkar / Muannas)</li>
+                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 3: Isim Isyarah (Jauh)</li>
+                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 4: Dhomir (Kata Ganti Nama)</li>
+                </ul>
+            </div>
+
             <form id="login-form" class="space-y-6">
+                <p class="text-center text-gray-500">Sila masukkan butiran anda untuk bermula.</p>
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
                     <input type="text" id="fullName" name="fullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -79,6 +90,9 @@
                     </button>
                 </div>
             </form>
+             <footer class="text-center text-xs text-gray-500 mt-8 pt-4 border-t border-gray-200">
+                &copy; <span id="year-login"></span> Wan Amirul Syahril | SK Bohor Baharu, Bandar Bera | <a href="mailto:g-41275961@moe-dl.edu.my?subject=Maklum%20Balas%20Kuiz%20Bahasa%20Arab" class="text-blue-600 hover:underline">Hantar Maklum Balas</a>
+            </footer>
         </div>
     </div>
 
@@ -132,6 +146,10 @@
                     </div>
                 </div>
             </div>
+            
+            <footer class="text-center text-xs text-gray-500 mt-12 py-4 border-t border-gray-200">
+                 &copy; <span id="year-main"></span> Wan Amirul Syahril | SK Bohor Baharu, Bandar Bera | <a href="mailto:g-41275961@moe-dl.edu.my?subject=Maklum%20Balas%20Kuiz%20Bahasa%20Arab" class="text-blue-600 hover:underline">Hantar Maklum Balas</a>
+            </footer>
         </div>
     </div>
 
@@ -155,13 +173,13 @@
                 section: "Bahagian 2: Pilih Jantina (الْمُذَكَّرُ / الْمُؤَنَّثُ) yang Betul",
                 questions: [
                     { question: "مُضِيفَةٌ", translation: "Pramugari", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
                     { question: "صَحَفِيٌّ", translation: "Wartawan", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "طَبَّاخٌ", translation: "Tukang masak", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "جُنْدِيٌّ", translation: "Askar", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "إِطْفَائِيٌّ", translation: "Ahli bomba", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّرُ" },
-                    { question: "طَبِيبَةٌ", translation: "Doktor", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
-                    { question: "مُحَاضِرَةٌ", translation: "Pensyarah", options: ["الْمُذَكَّرُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
+                    { question: "طَبَّاخٌ", translation: "Tukang masak", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّרُ" },
+                    { question: "جُنْدِيٌّ", translation: "Askar", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّרُ" },
+                    { question: "إِطْفَائِيٌّ", translation: "Ahli bomba", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُذَكَّרُ" },
+                    { question: "طَبِيبَةٌ", translation: "Doktor", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُحَاضِرَةٌ", translation: "Pensyarah", options: ["الْمُذَكَّרُ", "الْمُؤَنَّثُ"], answer: "الْمُؤَنَّثُ" }
                 ]
             },
             {
@@ -382,7 +400,7 @@
         }
         
         async function saveScoreToGoogleSheets() {
-            if (GOOGLE_SHEET_WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec') {
+            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
                 overallResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
                 return;
             }
@@ -428,7 +446,7 @@
         }
 
         async function showLeaderboardFromGoogleSheets() {
-             if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+             if (GOOGLE_SHEET_WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec') {
                 leaderboardContent.innerHTML = `<p class="text-red-500">Papan markah tidak dapat dimuatkan. Sila konfigurasikan URL Google Sheets Web App.</p>`;
                 return;
             }
@@ -498,8 +516,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
              // The login form is shown by default
+             document.getElementById('year-login').textContent = new Date().getFullYear();
+             document.getElementById('year-main').textContent = new Date().getFullYear();
         });
     </script>
 </body>
 </html>
+
 
