@@ -62,7 +62,8 @@
     <!-- Login Page -->
     <div id="login-container" class="flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md m-4">
-            <h1 class="text-3xl font-bold text-blue-600 mb-4 text-center">Laman Kuiz Bahasa Arab Interaktif</h1>
+            <h1 class="text-3xl font-bold text-blue-600 mb-2 text-center">Laman Kuiz Bahasa Arab Interaktif</h1>
+            <p class="text-center text-lg text-gray-600 mb-6">KSSR Semakan Bahasa Arab Tahun 6</p>
             
             <div class="mb-6 text-sm text-gray-600">
                 <h3 class="font-semibold text-center mb-3 text-gray-700">Kandungan Kuiz:</h3>
@@ -110,7 +111,8 @@
         <!-- Main Content -->
         <div class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
             <header class="text-center mb-8">
-                <h1 id="main-header" class="text-3xl sm:text-4xl font-bold text-blue-600">Kuiz Bahasa Arab</h1>
+                <h1 id="main-header" class="text-3xl sm:text-4xl font-bold text-blue-600"></h1>
+                <p id="main-subtitle" class="text-lg text-gray-600"></p>
                 <div id="user-info" class="mt-2 text-gray-600">
                     <!-- User info will be inserted here -->
                 </div>
@@ -158,15 +160,15 @@
             {
                 section: "Bahagian 1: Pilih إِسْم إِشَارَة (Isim Isyarah) Dekat yang Betul",
                 questions: [
-                    { question: "فُرْشَاةُ الْأَسْنَانِ", translation: "Berus gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
-                    { question: "مَعْجُونُ الْأَسْنَانِ", translation: "Ubat gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
-                    { question: "صَابُونٌ", translation: "Sabun", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
-                    { question: "شَامْبُو", translation: "Syampu", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
-                    { question: "مِقْلَمَةُ الْأَظَافِرِ", translation: "Pengetip kuku", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
-                    { question: "مَغْسَلَةٌ", translation: "Sinki", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
-                    { question: "سَلَّةُ الْمُهْمَلَاتِ", translation: "Tong sampah", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
-                    { question: "مِنْشَفَةٌ", translation: "Tuala", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
-                    { question: "دَلْوٌ", translation: "Baldi", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" }
+                    { question: "______ فُرْشَاةُ الْأَسْنَانِ", translation: "Berus gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
+                    { question: "______ مَعْجُونُ الْأَسْنَانِ", translation: "Ubat gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
+                    { question: "______ صَابُونٌ", translation: "Sabun", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
+                    { question: "______ شَامْبُو", translation: "Syampu", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
+                    { question: "______ مِقْلَمَةُ الْأَظَافِرِ", translation: "Pengetip kuku", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
+                    { question: "______ مَغْسَلَةٌ", translation: "Sinki", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
+                    { question: "______ سَلَّةُ الْمُهْمَلَاتِ", translation: "Tong sampah", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
+                    { question: "______ مِنْشَفَةٌ", translation: "Tuala", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
+                    { question: "______ دَلْوٌ", translation: "Baldi", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" }
                 ]
             },
             {
@@ -185,23 +187,23 @@
             {
                 section: "Bahagian 3: Pilih إِسْم إِشَارَة (Isim Isyarah) Jauh yang Betul",
                 questions: [
-                    { question: "حَافِلَةٌ", translation: "Bas", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
-                    { question: "سَيَّارَةٌ", translation: "Kereta", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
-                    { question: "قَارِبٌ", translation: "Bot", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
-                    { question: "قِطَارٌ كَهْرَبَائِيٌّ", translation: "Kereta api elektrik", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
-                    { question: "شَاحِنَةٌ", translation: "Lori", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
-                    { question: "طَائِرَةٌ", translation: "Kapal terbang", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
-                    { question: "مِرْوَحِيَّةٌ", translation: "Helikopter", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" }
+                    { question: "______ حَافِلَةٌ", translation: "Bas", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
+                    { question: "______ سَيَّارَةٌ", translation: "Kereta", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
+                    { question: "______ قَارِبٌ", translation: "Bot", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
+                    { question: "______ قِطَارٌ كَهْرَبَائِيٌّ", translation: "Kereta api elektrik", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
+                    { question: "______ شَاحِنَةٌ", translation: "Lori", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
+                    { question: "______ طَائِرَةٌ", translation: "Kapal terbang", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
+                    { question: "______ مِرْوَحِيَّةٌ", translation: "Helikopter", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" }
                 ]
             },
             {
                 section: "Bahagian 4: Pilih الضَّمِيرُ (Dhomir) yang Sesuai",
                 questions: [
-                    { question: "مَلَايُوِيٌّ", translation: "Orang Melayu", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتَ" },
-                    { question: "صِينِيَّةٌ", translation: "Orang Cina", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتِ" },
-                    { question: "هِنْدِيٌّ", translation: "Orang India", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتَ" },
-                    { question: "مُوَاطِنٌ أَصْلِيٌّ", translation: "Orang Asli", options: ["هِيَ", "هُوَ"], answer: "هُوَ" },
-                    { question: "طَائِرَةٌ", translation: "Kapal terbang", options: ["هِيَ", "هُوَ"], answer: "هِيَ" }
+                    { question: "______ مَلَايُوِيٌّ", translation: "Orang Melayu", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتَ" },
+                    { question: "______ صِينِيَّةٌ", translation: "Orang Cina", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتِ" },
+                    { question: "______ هِنْدِيٌّ", translation: "Orang India", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتَ" },
+                    { question: "______ مُوَاطِنٌ أَصْلِيٌّ", translation: "Orang Asli", options: ["هِيَ", "هُوَ"], answer: "هُوَ" },
+                    { question: "______ طَائِرَةٌ", translation: "Kapal terbang", options: ["هِيَ", "هُوَ"], answer: "هِيَ" }
                 ]
             }
         ];
@@ -215,6 +217,7 @@
         const loginForm = document.getElementById('login-form');
         const userInfo = document.getElementById('user-info');
         const mainHeader = document.getElementById('main-header');
+        const mainSubtitle = document.getElementById('main-subtitle');
         const homeContainer = document.getElementById('home-container');
         const homeGrid = document.getElementById('home-grid');
         const overallResultsContainer = document.getElementById('overall-results-container');
@@ -267,16 +270,21 @@
             document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
 
             if (viewName === 'home') {
-                mainHeader.textContent = "Kuiz Bahasa Arab";
+                mainHeader.textContent = "Halaman Utama";
+                mainSubtitle.textContent = "";
                 homeContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="home"]')?.classList.add('active');
                 renderHomePage();
             } else if (viewName.startsWith('quiz_')) {
                 const sectionIndex = parseInt(viewName.split('_')[1]);
+                const sectionData = quizData[sectionIndex];
+                mainHeader.textContent = sectionData.section.split(':')[0];
+                mainSubtitle.textContent = sectionData.section.split(': ')[1];
                 renderQuizForSection(sectionIndex);
                 quizContainer.style.display = 'block';
             } else if (viewName === 'leaderboard') {
                 mainHeader.textContent = "Papan Markah";
+                mainSubtitle.textContent = "Kedudukan Peserta Terkini";
                 leaderboardContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="leaderboard"]')?.classList.add('active');
                 showLeaderboardFromGoogleSheets();
@@ -337,7 +345,6 @@
             answeredInSection = 0;
             const sectionData = quizData[sectionIndex];
             
-            mainHeader.textContent = sectionData.section.split(':')[0];
             quizContent.innerHTML = '';
             sectionResultsContainer.innerHTML = '';
 
