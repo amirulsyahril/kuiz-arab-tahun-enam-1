@@ -55,6 +55,32 @@
         .trophy-gold { color: #ffd700; }
         .trophy-silver { color: #c0c0c0; }
         .trophy-bronze { color: #cd7f32; }
+        .note-modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .note-modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.95);}
+            to {opacity: 1; transform: scale(1);}
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -131,6 +157,9 @@
 
             <!-- Quiz Screen -->
             <main id="quiz-container" class="space-y-12" style="display: none;">
+                 <div id="quiz-header-actions" class="text-center mb-6">
+                    <!-- "Show Note" button will be injected here -->
+                 </div>
                  <div id="quiz-content" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Questions will be dynamically inserted here -->
                  </div>
@@ -154,11 +183,27 @@
             </footer>
         </div>
     </div>
+    
+    <!-- Note Modal -->
+    <div id="note-modal" class="note-modal">
+        <div class="note-modal-content">
+            <h2 id="note-title" class="text-2xl font-bold text-blue-600 mb-4"></h2>
+            <div id="note-content" class="text-gray-700 space-y-4"></div>
+            <button id="close-note-btn" class="mt-6 w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700">Tutup</button>
+        </div>
+    </div>
 
     <script>
         const quizData = [
             {
                 section: "Bahagian 1: Pilih إِسْم إِشَارَة (Isim Isyarah) Dekat yang Betul",
+                note: `
+                    <p><b>Isim Isyarah (Kata Tunjuk Dekat)</b> digunakan untuk menunjukkan sesuatu yang dekat.</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">هَذَا</b>: Digunakan untuk objek lelaki (muzakkar). Selalunya, perkataan ini tiada <b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">ة</b> di hujungnya.</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">هَذِهِ</b>: Digunakan untuk objek perempuan (muannas). Selalunya, perkataan ini mempunyai <b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">ة</b> di hujungnya.</li>
+                    </ul>
+                `,
                 questions: [
                     { question: "______ فُرْشَاةُ الْأَسْنَانِ", translation: "Berus gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذِهِ" },
                     { question: "______ مَعْجُونُ الْأَسْنَانِ", translation: "Ubat gigi", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
@@ -173,6 +218,14 @@
             },
             {
                 section: "Bahagian 2: Pilih Jantina (الْمُذَكَّرُ / الْمُؤَنَّثُ) yang Betul",
+                note: `
+                    <p>Dalam Bahasa Arab, setiap kata nama mempunyai jantina.</p>
+                     <ul class="list-disc list-inside mt-2">
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">الْمُذَكَّرُ</b> (Muzakkar) merujuk kepada jantina lelaki.</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">الْمُؤَنَّثُ</b> (Muannas) merujuk kepada jantina perempuan.</li>
+                    </ul>
+                    <p class="mt-2"><b>Petua:</b> Kebanyakan perkataan Muannas berakhir dengan huruf <b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">ة</b> (ta marbutah).</p>
+                `,
                 questions: [
                     { question: "مُضِيفَةٌ", translation: "Pramugari", options: ["الْمُؤَنَّثُ", "الْمُذَكَّرُ"], answer: "الْمُؤَنَّثُ" },
                     { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُؤَنَّثُ", "الْمُذَكَّرُ"], answer: "الْمُؤَنَّثُ" },
@@ -186,6 +239,13 @@
             },
             {
                 section: "Bahagian 3: Pilih إِسْم إِشَارَة (Isim Isyarah) Jauh yang Betul",
+                 note: `
+                    <p><b>Isim Isyarah (Kata Tunjuk Jauh)</b> digunakan untuk menunjukkan sesuatu yang jauh.</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">ذَلِكَ</b>: Bermaksud 'itu' untuk objek lelaki (muzakkar).</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">تِلْكَ</b>: Bermaksud 'itu' untuk objek perempuan (muannas), yang selalunya berakhir dengan huruf <b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">ة</b>.</li>
+                    </ul>
+                `,
                 questions: [
                     { question: "______ حَافِلَةٌ", translation: "Bas", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
                     { question: "______ سَيَّارَةٌ", translation: "Kereta", options: ["تِلْكَ", "ذَلِكَ"], answer: "تِلْكَ" },
@@ -198,6 +258,16 @@
             },
             {
                 section: "Bahagian 4: Pilih الضَّمِيرُ (Dhomir) yang Sesuai",
+                note: `
+                    <p><b>Dhomir (Kata Ganti Nama)</b> digunakan untuk menggantikan nama orang atau benda.</p>
+                     <ul class="list-disc list-inside mt-2">
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أَنْتَ</b>: Awak (untuk lelaki).</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أَنْتِ</b>: Awak (untuk perempuan).</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">هُوَ</b>: Dia (untuk lelaki).</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">هِيَ</b>: Dia (untuk perempuan).</li>
+                    </ul>
+                    <p class="mt-2">Padankan kata ganti nama dengan jantina perkataan yang diberi.</p>
+                `,
                 questions: [
                     { question: "______ مَلَايُوِيٌّ", translation: "Orang Melayu", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتَ" },
                     { question: "______ صِينِيَّةٌ", translation: "Orang Cina", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتِ" },
@@ -209,7 +279,7 @@
         ];
 
         // --- Google Sheet Web App URL ---
-        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec';
+        const GOOGLE_SHEET_WEB_APP_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
 
         // --- Element References ---
         const loginContainer = document.getElementById('login-container');
@@ -222,11 +292,17 @@
         const homeGrid = document.getElementById('home-grid');
         const overallResultsContainer = document.getElementById('overall-results-container');
         const quizContainer = document.getElementById('quiz-container');
+        const quizHeaderActions = document.getElementById('quiz-header-actions');
         const quizContent = document.getElementById('quiz-content');
         const sectionResultsContainer = document.getElementById('section-results-container');
         const leaderboardContainer = document.getElementById('leaderboard-container');
         const leaderboardContent = document.getElementById('leaderboard-content');
         const menuContainer = document.getElementById('menu-container');
+        const noteModal = document.getElementById('note-modal');
+        const noteTitle = document.getElementById('note-title');
+        const noteContent = document.getElementById('note-content');
+        const closeNoteBtn = document.getElementById('close-note-btn');
+
 
         // --- State Variables ---
         let currentFullName = '';
@@ -262,6 +338,26 @@
                 showView(targetView);
             }
         });
+        
+        // --- Note Modal Logic ---
+        function showNote(sectionIndex) {
+            const sectionData = quizData[sectionIndex];
+            noteTitle.textContent = sectionData.section.split(':')[0]; // e.g., "Bahagian 1"
+            noteContent.innerHTML = sectionData.note;
+            noteModal.style.display = 'flex';
+        }
+        
+        function hideNote() {
+            noteModal.style.display = 'none';
+        }
+        
+        closeNoteBtn.addEventListener('click', hideNote);
+        noteModal.addEventListener('click', (e) => {
+            if (e.target === noteModal) {
+                hideNote();
+            }
+        });
+
 
         function showView(viewName) {
             homeContainer.style.display = 'none';
@@ -277,9 +373,6 @@
                 renderHomePage();
             } else if (viewName.startsWith('quiz_')) {
                 const sectionIndex = parseInt(viewName.split('_')[1]);
-                const sectionData = quizData[sectionIndex];
-                mainHeader.textContent = sectionData.section.split(':')[0];
-                mainSubtitle.textContent = sectionData.section.split(': ')[1];
                 renderQuizForSection(sectionIndex);
                 quizContainer.style.display = 'block';
             } else if (viewName === 'leaderboard') {
@@ -345,6 +438,18 @@
             answeredInSection = 0;
             const sectionData = quizData[sectionIndex];
             
+            mainHeader.textContent = sectionData.section.split(':')[0];
+            mainSubtitle.textContent = sectionData.section.split(': ')[1];
+
+            // Add "Show Note" button
+            quizHeaderActions.innerHTML = `
+                <button id="show-note-btn" class="bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition-colors">
+                    💡 Lihat Nota Pembelajaran
+                </button>
+            `;
+            document.getElementById('show-note-btn').onclick = () => showNote(sectionIndex);
+
+            
             quizContent.innerHTML = '';
             sectionResultsContainer.innerHTML = '';
 
@@ -407,7 +512,7 @@
         }
         
         async function saveScoreToGoogleSheets() {
-            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+            if (GOOGLE_SHEET_WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec') {
                 overallResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
                 return;
             }
