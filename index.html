@@ -16,7 +16,7 @@
         .arabic-text {
             font-size: 1.5rem;
             font-weight: 500;
-            direction: rtl; 
+            direction: rtl;
             text-align: right;
         }
         .option-btn.correct {
@@ -34,15 +34,13 @@
             opacity: 0.9;
         }
         .menu-btn {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             font-weight: 600;
             color: #374151;
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             text-decoration: none;
+            white-space: nowrap;
         }
         .menu-btn:hover {
             background-color: #e5e7eb;
@@ -74,86 +72,91 @@
             padding: 2rem;
             border-radius: 1rem;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px; /* Wider for table */
             animation: fadeIn 0.3s;
         }
         @keyframes fadeIn {
             from {opacity: 0; transform: scale(0.95);}
             to {opacity: 1; transform: scale(1);}
         }
+         /* Styles for sentence arrangement */
+         .sentence-box {
+            border: 2px dashed #cbd5e1;
+            min-height: 50px;
+            direction: rtl;
+        }
+        .word-bank button {
+            cursor: pointer;
+        }
+        .word-bank button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .check-btn.correct {
+            background-color: #22c55e;
+        }
+        .check-btn.incorrect {
+            background-color: #ef4444;
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-
-    <!-- Login Page -->
-    <div id="login-container" class="flex items-center justify-center min-h-screen">
-        <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md m-4">
-            <h1 class="text-3xl font-bold text-blue-600 mb-2 text-center">Laman Kuiz Bahasa Arab Interaktif</h1>
-            <p class="text-center text-lg text-gray-600 mb-6">KSSR Semakan Bahasa Arab Tahun 6</p>
-            
-            <div class="mb-6 text-sm text-gray-600">
-                <h3 class="font-semibold text-center mb-3 text-gray-700">Kandungan Kuiz:</h3>
-                <ul class="list-none space-y-2 text-center">
-                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 1: Isim Isyarah (Dekat)</li>
-                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 2: Jantina (Muzakkar / Muannas)</li>
-                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 3: Isim Isyarah (Jauh)</li>
-                    <li class="bg-gray-50 p-2 rounded-md">Bahagian 4: Dhomir (Kata Ganti Nama)</li>
-                </ul>
-            </div>
-
-            <form id="login-form" class="space-y-6">
-                <p class="text-center text-gray-500">Sila masukkan butiran anda untuk bermula.</p>
-                <div>
-                    <label for="fullName" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
-                    <input type="text" id="fullName" name="fullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <label for="schoolName" class="block text-sm font-medium text-gray-700">Nama Sekolah</label>
-                    <input type="text" id="schoolName" name="schoolName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div>
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Masuk Latihan
-                    </button>
-                </div>
-            </form>
-             <footer class="text-center text-xs text-gray-500 mt-8 pt-4 border-t border-gray-200">
-                &copy; <span id="year-login"></span> Wan Amirul Syahril | SK Bohor Baharu, Bandar Bera | <a href="mailto:g-41275961@moe-dl.edu.my?subject=Maklum%20Balas%20Kuiz%20Bahasa%20Arab" class="text-blue-600 hover:underline">Hantar Maklum Balas</a>
-            </footer>
-        </div>
-    </div>
+<body class="bg-blue-50 text-gray-800">
 
     <!-- Main App Container -->
-    <div id="main-app-container" class="hidden flex-col md:flex-row min-h-screen">
-        <!-- Sidebar Menu -->
-        <aside class="w-full md:w-64 bg-white p-4 shadow-lg md:h-screen md:sticky top-0">
-            <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Menu</h2>
-            <nav id="menu-container" class="space-y-2">
-                 <a href="#" class="menu-btn" data-target="home">🏠 Halaman Utama</a>
-                 <a href="#" class="menu-btn" data-target="leaderboard">🏆 Papan Markah</a>
+    <div id="main-app-container">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-md w-full sticky top-0 z-10">
+            <nav class="p-4 flex flex-wrap justify-center sm:justify-between items-center max-w-7xl mx-auto gap-4">
+                <div class="text-2xl font-bold text-blue-600">
+                    Kuiz Interaktif Bahasa Arab Tahun 6
+                </div>
+                <div id="menu-container" class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="#" class="menu-btn" data-target="home">🏠 Halaman Utama</a>
+                    <a href="#" class="menu-btn" data-target="leaderboard">🏆 Papan Markah</a>
+                </div>
             </nav>
-        </aside>
+        </header>
 
         <!-- Main Content -->
-        <div class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+        <div class="p-4 sm:p-6 md:p-8">
             <header class="text-center mb-8">
                 <h1 id="main-header" class="text-3xl sm:text-4xl font-bold text-blue-600"></h1>
                 <p id="main-subtitle" class="text-lg text-gray-600"></p>
                 <div id="user-info" class="mt-2 text-gray-600">
-                    <!-- User info will be inserted here -->
+                    <!-- User info displays here during final exam -->
                 </div>
             </header>
 
             <!-- Home Screen -->
             <div id="home-container">
-                 <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6">Senarai Bahagian</h2>
+                 <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6">Senarai Bahagian Latihan & Ujian</h2>
                  <div id="home-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Home section cards will be inserted here -->
                  </div>
-                 <div id="overall-results-container" class="mt-8 text-center">
-                    <!-- Overall score and submit button will appear here -->
-                 </div>
+                 <!-- Overall results removed from home, submission happens after final exam -->
             </div>
+            
+             <!-- Final Exam Entry Form -->
+            <div id="final-exam-entry-container" style="display: none;" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10">
+                <h2 class="text-2xl font-bold text-blue-600 mb-6 text-center">Maklumat Ujian Akhir</h2>
+                <form id="final-exam-form" class="space-y-6">
+                    <p class="text-center text-gray-500">Sila masukkan butiran anda sebelum memulakan Ujian Akhir.</p>
+                    <div>
+                        <label for="finalFullName" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
+                        <input type="text" id="finalFullName" name="finalFullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="finalSchoolName" class="block text-sm font-medium text-gray-700">Nama Sekolah</label>
+                        <input type="text" id="finalSchoolName" name="finalSchoolName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Mula Ujian Akhir
+                        </button>
+                    </div>
+                </form>
+            </div>
+
 
             <!-- Quiz Screen -->
             <main id="quiz-container" class="space-y-12" style="display: none;">
@@ -172,6 +175,7 @@
             <div id="leaderboard-container" style="display: none;">
                 <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-6">Papan Markah</h2>
                 <div class="bg-white p-6 rounded-lg shadow-md">
+                     <p class="text-sm text-gray-600 mb-4">Papan markah menunjukkan skor Ujian Akhir yang dihantar.</p>
                     <div id="leaderboard-content" class="overflow-x-auto">
                         <!-- Leaderboard table will be inserted here -->
                     </div>
@@ -195,7 +199,7 @@
 
     <script>
         const quizData = [
-            {
+             {
                 section: "Bahagian 1: Pilih إِسْم إِشَارَة (Isim Isyarah) Dekat yang Betul",
                 note: `
                     <p><b>Isim Isyarah (Kata Tunjuk Dekat)</b> digunakan untuk menunjukkan sesuatu yang dekat.</p>
@@ -275,74 +279,186 @@
                     { question: "______ مُوَاطِنٌ أَصْلِيٌّ", translation: "Orang Asli", options: ["هِيَ", "هُوَ"], answer: "هُوَ" },
                     { question: "______ طَائِرَةٌ", translation: "Kapal terbang", options: ["هِيَ", "هُوَ"], answer: "هِيَ" }
                 ]
+            },
+            {
+                section: "Bahagian 5: Lengkapkan Ayat dengan Kata Nama yang Sesuai",
+                note: `
+                    <p><b>Lengkapkan ayat</b> dengan kata nama (ism) yang betul berdasarkan kata kerja (fi'il) yang diberi.</p>
+                     <ul class="list-disc list-inside mt-2">
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أُنَظِّفُ</b>: Saya membersihkan.</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أَغْسِلُ</b>: Saya membasuh.</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أَسْتَخْدِمُ</b>: Saya menggunakan.</li>
+                        <li><b class="arabic-text" style="font-size: 1.2rem; display: inline-block;">أَضَعُ</b>: Saya meletakkan.</li>
+                    </ul>
+                    <p class="mt-2">Pilih kata nama yang betul untuk melengkapkan ayat.</p>
+                `,
+                questions: [
+                    { question: "أُنَظِّفُ أَسْنَانِي بِـ ______", translation: "Saya membersihkan gigi saya dengan...", options: ["فُرْشَاةِ الْأَسْنَانِ", "الصَّابُونِ"], answer: "فُرْشَاةِ الْأَسْنَانِ" },
+                    { question: "أَغْسِلُ شَعْرِي بِـ ______", translation: "Saya membasuh rambut saya dengan...", options: ["الشَّامْبُو", "الْمَاءِ"], answer: "الشَّامْبُو" },
+                    { question: "أَسْتَخْدِمُ ______ لِتَرْتِيبِ الشَّعْرِ", translation: "Saya menggunakan ... untuk menyusun rambut", options: ["الْمِشْطَ", "مِقْلَمَةَ الْأَظَافِرِ"], answer: "الْمِشْطَ" },
+                    { question: "أُنَظِّفُ يَدَيَّ بِـ ______", translation: "Saya membersihkan tangan saya dengan...", options: ["الصَّابُونِ", "الشَّامْبُو"], answer: "الصَّابُونِ" },
+                    { question: "أَغْسِلُ وَجْهِي بِـ ______", translation: "Saya membasuh muka saya dengan...", options: ["الْمَاءِ", "الصَّابُونِ"], answer: "الْمَاءِ" },
+                    { question: "أَسْتَخْدِمُ ______ لِقَصِّ الْأَظَافِرِ", translation: "Saya menggunakan ... untuk memotong kuku", options: ["مِقْلَمَةَ الْأَظَافِرِ", "الْمِشْطَ"], answer: "مِقْلَمَةَ الْأَظَافِرِ" },
+                    { question: "أُنَظِّفُ يَدَيَّ فِي ______", translation: "Saya membersihkan tangan saya di...", options: ["الْمَغْسَلَةِ", "الْحَمَّامِ"], answer: "الْمَغْسَلَةِ" },
+                    { question: "أَضَعُ الْمِشْطَ أَمَامَ ______", translation: "Saya meletakkan sikat di hadapan...", options: ["الْمِرْآةِ", "الدُّلَابِ"], answer: "الْمِرْآةِ" }
+                ]
+            },
+            {
+                section: "Bahagian 6: Uji Kata Perbuatan (الْفِعْلُ) dengan Dhamir",
+                note: `
+                    <p><b>Uji Ingatan Anda!</b></p>
+                    <p class="mt-2">Pilih padanan yang betul antara Kata Ganti Nama (Dhamir) dan Kata Perbuatan (Fi'il).</p>
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full text-center border">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border p-2">Dhamir</th>
+                                    <th class="border p-2 arabic-text" style="font-size:1.1rem">يُنَظِّفُ (bersih)</th>
+                                    <th class="border p-2 arabic-text" style="font-size:1.1rem">يَغْسِلُ (basuh)</th>
+                                    <th class="border p-2 arabic-text" style="font-size:1.1rem">يَسْتَخْدِمُ (guna)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border p-2">Saya (أَنَا)</td>
+                                    <td class="border p-2 arabic-text">أُنَظِّفُ</td>
+                                    <td class="border p-2 arabic-text">أَغْسِلُ</td>
+                                    <td class="border p-2 arabic-text">أَسْتَخْدِمُ</td>
+                                </tr>
+                                <tr>
+                                    <td class="border p-2">Awak (L) (أَنْتَ)</td>
+                                    <td class="border p-2 arabic-text">تُنَظِّفُ</td>
+                                    <td class="border p-2 arabic-text">تَغْسِلُ</td>
+                                    <td class="border p-2 arabic-text">تَسْتَخْدِمُ</td>
+                                </tr>
+                                 <tr>
+                                    <td class="border p-2">Awak (P) (أَنْتِ)</td>
+                                    <td class="border p-2 arabic-text">تُنَظِّفِينَ</td>
+                                    <td class="border p-2 arabic-text">تَغْسِلِينَ</td>
+                                    <td class="border p-2 arabic-text">تَسْتَخْدِمِينَ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                questions: [
+                    { question: "Saya membersihkan", translation: "Terjemah ke Bahasa Arab", options: ["أُنَظِّفُ", "تُنَظِّفُ"], answer: "أُنَظِّفُ" },
+                    { question: "Awak (Lelaki) menggunakan", translation: "Terjemah ke Bahasa Arab", options: ["أَسْتَخْدِمُ", "تَسْتَخْدِمُ"], answer: "تَسْتَخْدِمُ" },
+                    { question: "Awak (Perempuan) membasuh", translation: "Terjemah ke Bahasa Arab", options: ["تَغْسِلُ", "تَغْسِلِينَ"], answer: "تَغْسِلِينَ" },
+                    { question: "أَسْتَخْدِمُ", translation: "Terjemah ke Bahasa Melayu", options: ["Saya menggunakan", "Awak (L) menggunakan"], answer: "Saya menggunakan"},
+                    { question: "تُنَظِّفِينَ", translation: "Terjemah ke Bahasa Melayu", options: ["Awak (P) membersihkan", "Saya membersihkan"], answer: "Awak (P) membersihkan" },
+                    { question: "تَغْسِلُ", translation: "Terjemah ke Bahasa Melayu", options: ["Awak (L) membasuh", "Saya membasuh"], answer: "Awak (L) membasuh" }
+                ]
+            },
+            {
+                section: "Bahagian 7: Susun Perkataan Menjadi Ayat Lengkap",
+                note: `
+                    <p><b>Susun Semula!</b></p>
+                    <p class="mt-2">Klik pada perkataan di bawah untuk menyusunnya menjadi ayat yang betul dan lengkap. Rujuk struktur ayat yang telah dipelajari.</p>
+                     <p class="mt-2"><b>Contoh Struktur:</b> Kata Tunjuk + Kata Nama + Sifat / Lokasi.</p>
+                `,
+                type: 'arrange',
+                questions: [
+                    { words: ["أَحْمَرُ", "هَذَا", "لَوْنُ", "الْمِشْطِ"], answer: "هَذَا لَوْنُ الْمِشْطِ أَحْمَرُ" },
+                    { words: ["الْمَغْسَلَةِ", "فِي", "يَدَيَّ", "أُنَظِّفُ"], answer: "أُنَظِّفُ يَدَيَّ فِي الْمَغْسَلَةِ" },
+                    { words: ["الْمِرْآةِ", "أَمَامَ", "الْمِشْطَ", "أَضَعُ"], answer: "أَضَعُ الْمِشْطَ أَمَامَ الْمِرْآةِ" }
+                ]
+            },
+            { // New Final Exam Section
+                section: "Ujian Akhir: Uji Kefahaman Anda",
+                isFinalExam: true, // Flag to identify the final exam
+                note: `
+                    <p><b>Selamat Menduduki Ujian Akhir!</b></p>
+                    <p class="mt-2">Bahagian ini mengandungi soalan-soalan daripada semua topik yang telah dipelajari. Jawab dengan teliti.</p>
+                    <p class="mt-2">Markah ujian ini akan dihantar ke papan markah.</p>
+                `,
+                questions: [ // Placeholder questions - replace with actual final exam questions
+                    // Example Question 1 (from Section 1)
+                    { question: "______ صَابُونٌ", translation: "Sabun", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
+                     // Example Question 2 (from Section 2)
+                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُؤَنَّثُ", "الْمُذَكَّרُ"], answer: "الْمُؤَنَّثُ" },
+                    // Example Question 3 (from Section 3)
+                     { question: "______ قَارِبٌ", translation: "Bot", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
+                    // Example Question 4 (from Section 4)
+                    { question: "______ صِينِيَّةٌ", translation: "Orang Cina", options: ["أَنْتِ", "أَنْتَ"], answer: "أَنْتِ" },
+                     // Example Question 5 (from Section 5)
+                    { question: "أَغْسِلُ وَجْهِي بِـ ______", translation: "Saya membasuh muka saya dengan...", options: ["الْمَاءِ", "الصَّابُونِ"], answer: "الْمَاءِ" },
+                    // Example Question 6 (from Section 6)
+                     { question: "Awak (Lelaki) menggunakan", translation: "Terjemah ke Bahasa Arab", options: ["أَسْتَخْدِمُ", "تَسْتَخْدِمُ"], answer: "تَسْتَخْدِمُ" },
+                    // Example Question 7 (from Section 7 - Arrange)
+                    { type: 'arrange', words: ["الْمَغْسَلَةِ", "فِي", "يَدَيَّ", "أُنَظِّفُ"], answer: "أُنَظِّفُ يَدَيَّ فِي الْمَغْسَلَةِ" },
+
+                ]
             }
         ];
 
         // --- Google Sheet Web App URL ---
-        const GOOGLE_SHEET_WEB_APP_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz-JCDVfQFaIMQDt1VKpyyZuFpiSNfGU53uyQgKDkJIrg1rnJ0eR2CHza1jvXW8o8P6/exec';
 
         // --- Element References ---
-        const loginContainer = document.getElementById('login-container');
-        const mainAppContainer = document.getElementById('main-app-container');
-        const loginForm = document.getElementById('login-form');
-        const userInfo = document.getElementById('user-info');
-        const mainHeader = document.getElementById('main-header');
-        const mainSubtitle = document.getElementById('main-subtitle');
-        const homeContainer = document.getElementById('home-container');
-        const homeGrid = document.getElementById('home-grid');
-        const overallResultsContainer = document.getElementById('overall-results-container');
-        const quizContainer = document.getElementById('quiz-container');
-        const quizHeaderActions = document.getElementById('quiz-header-actions');
-        const quizContent = document.getElementById('quiz-content');
-        const sectionResultsContainer = document.getElementById('section-results-container');
-        const leaderboardContainer = document.getElementById('leaderboard-container');
-        const leaderboardContent = document.getElementById('leaderboard-content');
-        const menuContainer = document.getElementById('menu-container');
-        const noteModal = document.getElementById('note-modal');
-        const noteTitle = document.getElementById('note-title');
-        const noteContent = document.getElementById('note-content');
-        const closeNoteBtn = document.getElementById('close-note-btn');
+        // Moved inside DOMContentLoaded
+        let mainAppContainer, userInfo, mainHeader, mainSubtitle, homeContainer, homeGrid;
+        let finalExamEntryContainer, finalExamForm, quizContainer, quizHeaderActions, quizContent;
+        let sectionResultsContainer, leaderboardContainer, leaderboardContent, menuContainer;
+        let noteModal, noteTitle, noteContent, closeNoteBtn;
 
 
         // --- State Variables ---
-        let currentFullName = '';
-        let currentSchoolName = '';
+        let currentFullName = 'Pelajar'; // Default for non-final exam interaction
+        let currentSchoolName = 'Sekolah'; // Default
+        let finalExamFullName = ''; // Specific for final exam submission
+        let finalExamSchoolName = ''; // Specific for final exam submission
         let sectionScores = {};
         let currentSectionIndex = -1;
         let currentSectionScore = 0;
         let answeredInSection = 0;
+        let isFinalExamMode = false; // To track if currently in final exam
 
         function initializeScores() {
             quizData.forEach((_, index) => {
-                sectionScores[`section_${index}`] = null;
+                 if (!quizData[index].isFinalExam) {
+                      sectionScores[`section_${index}`] = null;
+                 }
             });
+             sectionScores['final_exam'] = null;
+        }
+        
+        // Final Exam Form Submission
+         function handleFinalExamSubmit(e) {
+            e.preventDefault();
+            finalExamFullName = document.getElementById('finalFullName').value;
+            finalExamSchoolName = document.getElementById('finalSchoolName').value;
+
+            if (finalExamFullName.trim() && finalExamSchoolName.trim()) {
+                 currentFullName = finalExamFullName; 
+                 currentSchoolName = finalExamSchoolName; 
+                 
+                 finalExamEntryContainer.style.display = 'none'; 
+                 isFinalExamMode = true; 
+                 
+                 const finalExamIndex = quizData.findIndex(section => section.isFinalExam);
+                 if (finalExamIndex !== -1) {
+                    renderQuizForSection(finalExamIndex); 
+                    quizContainer.style.display = 'block';
+                 } else {
+                     console.error("Final Exam section not found in quizData");
+                 }
+            }
         }
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            currentFullName = document.getElementById('fullName').value;
-            currentSchoolName = document.getElementById('schoolName').value;
 
-            if (currentFullName.trim() && currentSchoolName.trim()) {
-                userInfo.innerHTML = `<p class="font-semibold">${currentFullName}</p><p class="text-sm">${currentSchoolName}</p>`;
-                loginContainer.style.display = 'none';
-                mainAppContainer.className = 'flex flex-col md:flex-row min-h-screen';
-                startQuizApp();
-            }
-        });
-
-        menuContainer.addEventListener('click', (e) => {
+        function handleMenuClick(e) {
             if (e.target.matches('.menu-btn')) {
                 e.preventDefault();
                 const targetView = e.target.dataset.target;
                 showView(targetView);
             }
-        });
+        }
         
         // --- Note Modal Logic ---
         function showNote(sectionIndex) {
             const sectionData = quizData[sectionIndex];
-            noteTitle.textContent = sectionData.section.split(':')[0]; // e.g., "Bahagian 1"
+            noteTitle.textContent = sectionData.section.split(':')[0]; 
             noteContent.innerHTML = sectionData.note;
             noteModal.style.display = 'flex';
         }
@@ -351,33 +467,47 @@
             noteModal.style.display = 'none';
         }
         
-        closeNoteBtn.addEventListener('click', hideNote);
-        noteModal.addEventListener('click', (e) => {
+       function handleCloseNoteClick() {
+            hideNote();
+        }
+        
+        function handleModalBackgroundClick(e) {
             if (e.target === noteModal) {
                 hideNote();
             }
-        });
+        }
 
 
         function showView(viewName) {
             homeContainer.style.display = 'none';
             quizContainer.style.display = 'none';
             leaderboardContainer.style.display = 'none';
+             finalExamEntryContainer.style.display = 'none'; 
             document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+             isFinalExamMode = false; 
 
             if (viewName === 'home') {
                 mainHeader.textContent = "Halaman Utama";
-                mainSubtitle.textContent = "";
+                mainSubtitle.textContent = "Pilih Latihan atau Ujian";
                 homeContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="home"]')?.classList.add('active');
                 renderHomePage();
             } else if (viewName.startsWith('quiz_')) {
                 const sectionIndex = parseInt(viewName.split('_')[1]);
-                renderQuizForSection(sectionIndex);
-                quizContainer.style.display = 'block';
+                const sectionData = quizData[sectionIndex];
+
+                 if (sectionData.isFinalExam) {
+                     mainHeader.textContent = "Ujian Akhir";
+                     mainSubtitle.textContent = "Sila Masukkan Maklumat Anda";
+                     finalExamEntryContainer.style.display = 'block';
+                 } else {
+                    renderQuizForSection(sectionIndex);
+                    quizContainer.style.display = 'block';
+                 }
+
             } else if (viewName === 'leaderboard') {
                 mainHeader.textContent = "Papan Markah";
-                mainSubtitle.textContent = "Kedudukan Peserta Terkini";
+                mainSubtitle.textContent = "Kedudukan Ujian Akhir";
                 leaderboardContainer.style.display = 'block';
                 document.querySelector('.menu-btn[data-target="leaderboard"]')?.classList.add('active');
                 showLeaderboardFromGoogleSheets();
@@ -386,50 +516,31 @@
 
         function renderHomePage() {
             homeGrid.innerHTML = '';
-            let completedCount = 0;
-            let totalScore = 0;
-            let totalPossibleScore = 0;
 
             quizData.forEach((sectionData, index) => {
-                const score = sectionScores[`section_${index}`];
-                const sectionTotal = sectionData.questions.length;
-                totalPossibleScore += sectionTotal;
-
-                const isCompleted = score !== null;
-                if (isCompleted) {
-                    completedCount++;
-                    totalScore += score;
-                }
+                 const isFinal = sectionData.isFinalExam;
+                 const scoreKey = isFinal ? 'final_exam' : `section_${index}`;
+                 const score = sectionScores[scoreKey];
+                 const sectionTotal = sectionData.questions.length; 
+                
+                 const isCompleted = score !== null;
 
                 const card = document.createElement('div');
-                card.className = `p-6 rounded-lg shadow-md transition-all cursor-pointer ${isCompleted ? 'bg-green-100 border-2 border-green-500' : 'bg-white hover:shadow-xl hover:scale-105'}`;
+                card.className = `p-6 rounded-lg shadow-md transition-all cursor-pointer ${
+                    isFinal 
+                    ? 'bg-yellow-100 border-2 border-yellow-500 hover:shadow-xl hover:scale-105' 
+                    : (isCompleted ? 'bg-green-100 border-2 border-green-500' : 'bg-white hover:shadow-xl hover:scale-105')
+                }`;
                 card.innerHTML = `
-                    <h3 class="font-bold text-lg text-blue-600">${sectionData.section.split(':')[0]}</h3>
+                    <h3 class="font-bold text-lg ${isFinal ? 'text-yellow-700' : 'text-blue-600'}">${sectionData.section.split(':')[0]}</h3>
                     <p class="text-gray-700 mt-1">${sectionData.section.split(': ')[1]}</p>
-                    <div class="mt-4 font-bold text-lg ${isCompleted ? 'text-green-700' : 'text-gray-400'}">
-                        ${isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Selesai'}
+                    <div class="mt-4 font-bold text-lg ${isCompleted ? (isFinal ? 'text-yellow-800' : 'text-green-700') : 'text-gray-400'}">
+                         ${isFinal ? (isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Diambil') : (isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Selesai')}
                     </div>
                 `;
                 card.onclick = () => showView(`quiz_${index}`);
                 homeGrid.appendChild(card);
             });
-
-            if (completedCount > 0) {
-                overallResultsContainer.innerHTML = `
-                    <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
-                        <h3 class="text-2xl font-bold mb-2">Markah Keseluruhan</h3>
-                        <p class="text-xl mb-4">
-                            <span class="font-bold text-blue-600">${totalScore}</span> / ${totalPossibleScore}
-                        </p>
-                        <button id="submit-overall-score-btn" class="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition-colors">
-                            Hantar Markah ke Papan Markah
-                        </button>
-                    </div>
-                `;
-                document.getElementById('submit-overall-score-btn').onclick = saveScoreToGoogleSheets;
-            } else {
-                overallResultsContainer.innerHTML = '';
-            }
         }
 
         function renderQuizForSection(sectionIndex) {
@@ -440,8 +551,13 @@
             
             mainHeader.textContent = sectionData.section.split(':')[0];
             mainSubtitle.textContent = sectionData.section.split(': ')[1];
+            
+            // Ensure userInfo is available before accessing innerHTML
+            if (userInfo) {
+                 userInfo.innerHTML = isFinalExamMode ? `<p class="font-semibold">${currentFullName}</p><p class="text-sm">${currentSchoolName}</p>` : '';
+            }
 
-            // Add "Show Note" button
+
             quizHeaderActions.innerHTML = `
                 <button id="show-note-btn" class="bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition-colors">
                     💡 Lihat Nota Pembelajaran
@@ -452,35 +568,153 @@
             
             quizContent.innerHTML = '';
             sectionResultsContainer.innerHTML = '';
+            quizContent.classList.add('md:grid-cols-2'); 
 
-            sectionData.questions.forEach(q => {
-                const questionCard = document.createElement('div');
-                questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col items-center';
-                const questionText = document.createElement('p');
-                questionText.className = 'arabic-text text-center text-2xl';
-                questionText.textContent = q.question;
-                
-                const translationText = document.createElement('p');
-                translationText.className = 'text-center text-gray-500 mb-5 text-md italic';
-                translationText.textContent = `(${q.translation})`;
+            sectionData.questions.forEach((q, qIndex) => {
+                 if (q.type === 'arrange' || sectionData.type === 'arrange') { 
+                    quizContent.classList.remove('md:grid-cols-2'); 
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md md:col-span-2'; 
+                    
+                    const sentenceBox = document.createElement('div');
+                    sentenceBox.className = 'sentence-box p-3 rounded-md mb-4 flex items-center justify-end flex-wrap-reverse gap-2 arabic-text text-xl';
+                    
+                    const wordBank = document.createElement('div');
+                    wordBank.className = 'word-bank flex flex-wrap justify-center gap-3 p-3 border-t';
 
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'flex justify-center items-center gap-4 mt-auto';
-                
-                q.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option;
-                    button.className = 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                    button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer));
-                    optionsContainer.appendChild(button);
-                });
-                
-                questionCard.appendChild(questionText);
-                questionCard.appendChild(translationText);
-                questionCard.appendChild(optionsContainer);
-                quizContent.appendChild(questionCard);
+                    const wordsToShuffle = q.words || [];
+                    const shuffledWords = [...wordsToShuffle].sort(() => Math.random() - 0.5);
+
+
+                    shuffledWords.forEach(word => {
+                        const wordBtn = document.createElement('button');
+                        wordBtn.textContent = word;
+                        wordBtn.className = 'arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
+                        wordBtn.onclick = () => {
+                            sentenceBox.appendChild(wordBtn);
+                            wordBtn.onclick = null; 
+                        };
+                        wordBank.appendChild(wordBtn);
+                    });
+                    
+                    const actionsContainer = document.createElement('div');
+                    actionsContainer.className = 'flex justify-center gap-4 mt-4';
+                    
+                    const checkBtn = document.createElement('button');
+                    checkBtn.textContent = 'Semak';
+                    checkBtn.className = 'check-btn bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600';
+                    checkBtn.onclick = () => {
+                        const arrangedSentence = Array.from(sentenceBox.children).map(btn => btn.textContent).join(' ');
+                        if (arrangedSentence === q.answer) {
+                            checkBtn.classList.add('correct');
+                            currentSectionScore++;
+                        } else {
+                            checkBtn.classList.add('incorrect');
+                        }
+                        wordBank.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                        checkBtn.disabled = true;
+                        resetBtn.disabled = true;
+                        answeredInSection++;
+                        if (answeredInSection === sectionData.questions.length) {
+                             showSectionResults();
+                        }
+                    };
+
+                    const resetBtn = document.createElement('button');
+                    resetBtn.textContent = 'Susun Semula';
+                    resetBtn.className = 'bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600';
+                    resetBtn.onclick = () => {
+                         sentenceBox.innerHTML = '';
+                         wordBank.innerHTML = '';
+                         shuffledWords.forEach(word => {
+                            const wordBtn = document.createElement('button');
+                            wordBtn.textContent = word;
+                            wordBtn.className = 'arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
+                            wordBtn.onclick = () => {
+                                sentenceBox.appendChild(wordBtn);
+                                wordBtn.onclick = null;
+                            };
+                            wordBank.appendChild(wordBtn);
+                        });
+                    };
+
+                    actionsContainer.appendChild(resetBtn);
+                    actionsContainer.appendChild(checkBtn);
+                    
+                    questionCard.appendChild(sentenceBox);
+                    questionCard.appendChild(wordBank);
+                    questionCard.appendChild(actionsContainer);
+                    quizContent.appendChild(questionCard);
+                } else { 
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col items-center';
+                    const questionText = document.createElement('p');
+                    const isArabicQuestion = /[\u0600-\u06FF]/.test(q.question);
+                    questionText.className = isArabicQuestion ? 'arabic-text text-center text-2xl' : 'text-center text-2xl font-semibold';
+                    questionText.textContent = q.question;
+                    
+                    const translationText = document.createElement('p');
+                    translationText.className = 'text-center text-gray-500 mb-5 text-md italic';
+                    translationText.textContent = `(${q.translation})`;
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'flex justify-center items-center gap-4 mt-auto';
+                    
+                    q.options.forEach(option => {
+                        const button = document.createElement('button');
+                        const isArabicOption = /[\u0600-\u06FF]/.test(option);
+                        button.textContent = option;
+                        button.className = isArabicOption 
+                            ? 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300'
+                            : 'option-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
+                        button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer));
+                        optionsContainer.appendChild(button);
+                    });
+                    
+                    questionCard.appendChild(questionText);
+                    questionCard.appendChild(translationText);
+                    questionCard.appendChild(optionsContainer);
+                    quizContent.appendChild(questionCard);
+                }
             });
+
         }
+        
+       function showSectionResults() {
+             const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
+             const sectionData = quizData[currentSectionIndex];
+             const scoreKey = sectionData.isFinalExam ? 'final_exam' : `section_${currentSectionIndex}`;
+             
+             sectionScores[scoreKey] = currentSectionScore; 
+
+             let resultsHtml = `
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-2">${sectionData.isFinalExam ? 'Ujian Akhir Selesai!' : 'Bahagian Selesai!'}</h3>
+                    <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${totalQuestionsInSection}</p>`;
+
+             if (sectionData.isFinalExam) {
+                 resultsHtml += `
+                    <button id="submit-final-exam-btn" class="mt-4 bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">
+                        Hantar Markah Ujian Akhir
+                    </button>`;
+             } else {
+                 resultsHtml += `
+                    <button id="finish-section-btn" class="mt-4 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">
+                        Kembali ke Halaman Utama
+                    </button>`;
+             }
+             resultsHtml += `</div>`;
+             
+             sectionResultsContainer.innerHTML = resultsHtml;
+
+             if (sectionData.isFinalExam) {
+                 document.getElementById('submit-final-exam-btn').onclick = saveScoreToGoogleSheets;
+             } else {
+                 document.getElementById('finish-section-btn').onclick = () => showView('home');
+             }
+             isFinalExamMode = false; 
+        }
+
 
         function handleAnswerClick(button, option, question, optionsContainer) {
             optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
@@ -497,63 +731,64 @@
             
             const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
             if (answeredInSection === totalQuestionsInSection) {
-                sectionScores[`section_${currentSectionIndex}`] = currentSectionScore;
-                sectionResultsContainer.innerHTML = `
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-bold mb-2">Bahagian Selesai!</h3>
-                        <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${totalQuestionsInSection}</p>
-                        <button id="finish-section-btn" class="mt-4 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">
-                            Kembali ke Halaman Utama
-                        </button>
-                    </div>
-                `;
-                document.getElementById('finish-section-btn').onclick = () => showView('home');
+                showSectionResults();
             }
         }
         
         async function saveScoreToGoogleSheets() {
-            if (GOOGLE_SHEET_WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbyiuW_ghFlmQh6buiWYcFmI8Tww40myf8j-ttUxqPP4er__Yw8J16YNroMJDLx1OfuGZg/exec') {
-                overallResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
+             if (!isFinalExamMode) {
+                 console.warn("Attempted to save score outside of final exam mode.");
+                 return; 
+             }
+            
+            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                sectionResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
                 return;
             }
-            const submitBtn = document.getElementById('submit-overall-score-btn');
+            const submitBtn = document.getElementById('submit-final-exam-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Menyimpan...';
 
-            const totalScore = Object.values(sectionScores).reduce((acc, val) => acc + (val || 0), 0);
-            const totalPossibleScore = quizData.reduce((acc, section) => acc + section.questions.length, 0);
+             const finalExamScore = sectionScores['final_exam']; 
+             const finalExamTotalQuestions = quizData.find(s => s.isFinalExam)?.questions.length || 0;
+
 
             const data = {
-                fullName: currentFullName,
-                schoolName: currentSchoolName,
-                scores: sectionScores,
-                totalScore: totalScore,
-                totalQuestions: totalPossibleScore
+                fullName: finalExamFullName, 
+                schoolName: finalExamSchoolName, 
+                scores: { final_exam: finalExamScore }, 
+                totalScore: finalExamScore, 
+                totalQuestions: finalExamTotalQuestions 
             };
 
             try {
                  await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
+                    mode: 'no-cors', 
                     cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
-                    redirect: 'follow'
+                    redirect: 'follow' 
                 });
                 
-                overallResultsContainer.innerHTML = `
-                     <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
-                        <p class="text-green-600 font-semibold mb-4 text-xl">Markah anda telah berjaya dihantar!</p>
-                        <button id="view-leaderboard-btn" class="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Lihat Papan Markah</button>
+                sectionResultsContainer.innerHTML = `
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                         <h3 class="text-xl font-bold mb-2">Ujian Akhir Selesai!</h3>
+                         <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${finalExamTotalQuestions}</p>
+                        <p class="text-green-600 font-semibold my-4 text-xl">Markah anda telah berjaya dihantar!</p>
+                        <button id="view-leaderboard-btn" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 mr-2">Lihat Papan Markah</button>
+                         <button id="back-home-btn" class="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-600">Kembali ke Halaman Utama</button>
                      </div>
                 `;
                 document.getElementById('view-leaderboard-btn').onclick = () => showView('leaderboard');
+                document.getElementById('back-home-btn').onclick = () => showView('home');
+
 
             } catch (error) {
                 console.error("Error saving score to Google Sheets:", error);
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Hantar Markah ke Papan Markah';
-                overallResultsContainer.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
+                submitBtn.textContent = 'Hantar Markah Ujian Akhir';
+                sectionResultsContainer.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
             }
         }
 
@@ -564,13 +799,15 @@
             }
             leaderboardContent.innerHTML = `<p>Memuatkan markah...</p>`;
             try {
-                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL);
+                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL); 
                 const scores = await response.json();
 
                 if (scores.length === 0) {
-                    leaderboardContent.innerHTML = `<p>Tiada markah lagi. Jadilah yang pertama!</p>`;
+                    leaderboardContent.innerHTML = `<p>Tiada markah Ujian Akhir lagi. Jadilah yang pertama!</p>`;
                     return;
                 }
+                
+                 const finalExamTotalQuestions = quizData.find(s => s.isFinalExam)?.questions.length || 0; 
                 
                 let tableHtml = `
                     <table class="min-w-full divide-y divide-gray-200">
@@ -579,12 +816,7 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ked.</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
-                `;
-                quizData.forEach((_, index) => {
-                     tableHtml += `<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bhg. ${index + 1}</th>`;
-                });
-                tableHtml += `
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Markah</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Markah Ujian Akhir</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -601,16 +833,9 @@
                             <td class="px-4 py-4 whitespace-nowrap text-lg font-bold">${rankIcon}</td>
                             <td class="px-4 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
                             <td class="px-4 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
-                    `;
-                    quizData.forEach((sectionData, secIndex) => {
-                        const score = entry[`score_section_${secIndex}`] ?? '-';
-                        const total = sectionData.questions.length;
-                        tableHtml += `<td class="px-4 py-4 whitespace-nowrap text-center text-gray-600">${score}/${total}</td>`;
-                    });
-                     tableHtml += `
-                            <td class="px-4 py-4 whitespace-nowrap font-bold text-blue-600">${entry.totalScore} / ${entry.totalQuestions}</td>
+                            <td class="px-4 py-4 whitespace-nowrap font-bold text-blue-600 text-center">${entry.totalScore} / ${entry.totalQuestions || finalExamTotalQuestions}</td> 
                         </tr>
-                    `;
+                    `; 
                 });
                 tableHtml += `</tbody></table>`;
                 leaderboardContent.innerHTML = tableHtml;
@@ -623,13 +848,41 @@
         
         function startQuizApp() {
             initializeScores();
-            showView('home');
+            showView('home'); 
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-             // The login form is shown by default
-             document.getElementById('year-login').textContent = new Date().getFullYear();
+             // Define element references after DOM is loaded
+             mainAppContainer = document.getElementById('main-app-container');
+             userInfo = document.getElementById('user-info'); 
+             mainHeader = document.getElementById('main-header');
+             mainSubtitle = document.getElementById('main-subtitle');
+             homeContainer = document.getElementById('home-container');
+             homeGrid = document.getElementById('home-grid');
+             finalExamEntryContainer = document.getElementById('final-exam-entry-container');
+             finalExamForm = document.getElementById('final-exam-form');
+             quizContainer = document.getElementById('quiz-container');
+             quizHeaderActions = document.getElementById('quiz-header-actions');
+             quizContent = document.getElementById('quiz-content');
+             sectionResultsContainer = document.getElementById('section-results-container');
+             leaderboardContainer = document.getElementById('leaderboard-container');
+             leaderboardContent = document.getElementById('leaderboard-content');
+             menuContainer = document.getElementById('menu-container');
+             noteModal = document.getElementById('note-modal');
+             noteTitle = document.getElementById('note-title');
+             noteContent = document.getElementById('note-content');
+             closeNoteBtn = document.getElementById('close-note-btn');
+
+             // Add event listeners
+             finalExamForm.addEventListener('submit', handleFinalExamSubmit);
+             menuContainer.addEventListener('click', handleMenuClick);
+             closeNoteBtn.addEventListener('click', handleCloseNoteClick);
+             noteModal.addEventListener('click', handleModalBackgroundClick);
+
+             // Start the app
+             mainAppContainer.style.display = 'block'; 
              document.getElementById('year-main').textContent = new Date().getFullYear();
+             startQuizApp(); 
         });
     </script>
 </body>
