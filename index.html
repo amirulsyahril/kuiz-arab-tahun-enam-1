@@ -94,9 +94,13 @@
         }
         .check-btn.correct {
             background-color: #22c55e;
+            color: white;
+            border-color: #16a34a;
         }
         .check-btn.incorrect {
             background-color: #ef4444;
+            color: white;
+            border-color: #dc2626;
         }
     </style>
 </head>
@@ -296,7 +300,7 @@
                     { question: "أُنَظِّفُ أَسْنَانِي بِـ ______", translation: "Saya membersihkan gigi saya dengan...", options: ["فُرْشَاةِ الْأَسْنَانِ", "الصَّابُونِ"], answer: "فُرْشَاةِ الْأَسْنَانِ" },
                     { question: "أَغْسِلُ شَعْرِي بِـ ______", translation: "Saya membasuh rambut saya dengan...", options: ["الشَّامْبُو", "الْمَاءِ"], answer: "الشَّامْبُو" },
                     { question: "أَسْتَخْدِمُ ______ لِتَرْتِيبِ الشَّعْرِ", translation: "Saya menggunakan ... untuk menyusun rambut", options: ["الْمِشْطَ", "مِقْلَمَةَ الْأَظَافِرِ"], answer: "الْمِشْطَ" },
-                    { question: "أُنَظِّفُ يَدَيَّ بِـ ______", translation: "Saya membersihkan tangan saya dengan...", options: ["الصَّابُونِ", "الشَّامْبُو"], answer: "الصَّابُونِ" },
+                    { question: "أُنَظِّفُ يَدَيَّ بِـ ______", translation: "Saya membersihkan tangan saya dengan...", options: ["الصَّابُونِ", "الشَّامْبُو"], answer: "الصَّابُONِ" },
                     { question: "أَغْسِلُ وَجْهِي بِـ ______", translation: "Saya membasuh muka saya dengan...", options: ["الْمَاءِ", "الصَّابُونِ"], answer: "الْمَاءِ" },
                     { question: "أَسْتَخْدِمُ ______ لِقَصِّ الْأَظَافِرِ", translation: "Saya menggunakan ... untuk memotong kuku", options: ["مِقْلَمَةَ الْأَظَافِرِ", "الْمِشْطَ"], answer: "مِقْلَمَةَ الْأَظَافِرِ" },
                     { question: "أُنَظِّفُ يَدَيَّ فِي ______", translation: "Saya membersihkan tangan saya di...", options: ["الْمَغْسَلَةِ", "الْحَمَّامِ"], answer: "الْمَغْسَلَةِ" },
@@ -376,7 +380,7 @@
                     // Example Question 1 (from Section 1)
                     { question: "______ صَابُونٌ", translation: "Sabun", options: ["هَذِهِ", "هَذَا"], answer: "هَذَا" },
                      // Example Question 2 (from Section 2)
-                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُؤَنَّثُ", "الْمُذَكَّרُ"], answer: "الْمُؤَنَّثُ" },
+                    { question: "مُمَرِّضَةٌ", translation: "Jururawat", options: ["الْمُؤَنَّثُ", "الْمُذَكَّرُ"], answer: "الْمُؤَنَّثُ" },
                     // Example Question 3 (from Section 3)
                      { question: "______ قَارِبٌ", translation: "Bot", options: ["تِلْكَ", "ذَلِكَ"], answer: "ذَلِكَ" },
                     // Example Question 4 (from Section 4)
@@ -393,10 +397,18 @@
         ];
 
         // --- Google Sheet Web App URL ---
-        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzJU8lu4aO_5fCChjdH1OseNTdTxOeb1xXXTu7u9_ph_0B2CB9OqA0tKl_oevt-yNys/exec';
+        // !! PENTING !!
+        // Gantikan URL ini dengan URL Web App Google Sheets anda yang telah di-deploy.
+        // 1. Pergi ke Google Apps Script.
+        // 2. Klik "Deploy" -> "New deployment".
+        // 3. Pilih "Web app".
+        // 4. Tetapkan "Execute as" kepada "Me".
+        // 5. Tetapkan "Who has access" kepada "Anyone".
+        // 6. Klik "Deploy".
+        // 7. Salin "Web app URL" dan tampal di bawah.
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzJU8lu4aO_5fCChjdH1OseNTdTxOeb1xXXTu7u9_ph_0B2CB9OqA0tKl_oevt-yNys/exec'; // GANTIKAN DENGAN URL WEB APP ANDA
 
         // --- Element References ---
-        // Moved inside DOMContentLoaded
         let mainAppContainer, userInfo, mainHeader, mainSubtitle, homeContainer, homeGrid;
         let finalExamEntryContainer, finalExamForm, quizContainer, quizHeaderActions, quizContent;
         let sectionResultsContainer, leaderboardContainer, leaderboardContent, menuContainer;
@@ -484,7 +496,12 @@
             leaderboardContainer.style.display = 'none';
              finalExamEntryContainer.style.display = 'none'; 
             document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
-             isFinalExamMode = false; 
+             
+            // Reset final exam mode if not navigating to the quiz from the entry form
+            if (!viewName.startsWith('quiz_')) {
+                 isFinalExamMode = false; 
+                 userInfo.textContent = '';
+            }
 
             if (viewName === 'home') {
                 mainHeader.textContent = "Halaman Utama";
@@ -496,11 +513,12 @@
                 const sectionIndex = parseInt(viewName.split('_')[1]);
                 const sectionData = quizData[sectionIndex];
 
-                 if (sectionData.isFinalExam) {
+                 if (sectionData.isFinalExam && !isFinalExamMode) { // Check if it's final exam AND we haven't entered details
                      mainHeader.textContent = "Ujian Akhir";
                      mainSubtitle.textContent = "Sila Masukkan Maklumat Anda";
                      finalExamEntryContainer.style.display = 'block';
                  } else {
+                    // This handles normal sections OR the final exam after details are entered
                     renderQuizForSection(sectionIndex);
                     quizContainer.style.display = 'block';
                  }
@@ -533,358 +551,452 @@
                 }`;
                 card.innerHTML = `
                     <h3 class="font-bold text-lg ${isFinal ? 'text-yellow-700' : 'text-blue-600'}">${sectionData.section.split(':')[0]}</h3>
-                    <p class="text-gray-700 mt-1">${sectionData.section.split(': ')[1]}</p>
-                    <div class="mt-4 font-bold text-lg ${isCompleted ? (isFinal ? 'text-yellow-800' : 'text-green-700') : 'text-gray-400'}">
-                         ${isFinal ? (isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Diambil') : (isCompleted ? `Markah: ${score} / ${sectionTotal}` : 'Belum Selesai')}
+                    <p class="text-gray-700 mt-1">${sectionData.section.split(': ')[1] || (isFinal ? 'Uji kefahaman semua topik' : 'Latihan topik')}</p>
+                    <div class="mt-4 font-bold text-lg ${isCompleted ? (isFinal ? 'text-yellow-800' : 'text-green-700') : (isFinal ? 'text-yellow-700' : 'text-gray-700')}">
+                        ${isCompleted ? `Skor: ${score}/${sectionTotal} (${Math.round((score / sectionTotal) * 100)}%)` : (isFinal ? 'Mula Ujian Akhir' : 'Mula Latihan')}
                     </div>
                 `;
-                card.onclick = () => showView(`quiz_${index}`);
+                card.addEventListener('click', () => {
+                    showView(`quiz_${index}`);
+                });
                 homeGrid.appendChild(card);
             });
         }
 
         function renderQuizForSection(sectionIndex) {
             currentSectionIndex = sectionIndex;
-            currentSectionScore = 0;
-            answeredInSection = 0;
-            const sectionData = quizData[sectionIndex];
+            const sectionData = quizData[currentSectionIndex];
             
-            mainHeader.textContent = sectionData.section.split(':')[0];
-            mainSubtitle.textContent = sectionData.section.split(': ')[1];
-            
-            // Ensure userInfo is available before accessing innerHTML
-            if (userInfo) {
-                 userInfo.innerHTML = isFinalExamMode ? `<p class="font-semibold">${currentFullName}</p><p class="text-sm">${currentSchoolName}</p>` : '';
+            // Set headers based on mode
+            if (isFinalExamMode) {
+                mainHeader.textContent = sectionData.section;
+                mainSubtitle.textContent = `Pelajar: ${finalExamFullName} | Sekolah: ${finalExamSchoolName}`;
+                userInfo.textContent = `Pelajar: ${finalExamFullName} | Sekolah: ${finalExamSchoolName}`;
+            } else {
+                mainHeader.textContent = sectionData.section.split(':')[0];
+                mainSubtitle.textContent = sectionData.section.split(': ')[1] || "Jawab soalan berikut";
+                userInfo.textContent = '';
             }
 
-
-            quizHeaderActions.innerHTML = `
-                <button id="show-note-btn" class="bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition-colors">
-                    💡 Lihat Nota Pembelajaran
-                </button>
-            `;
-            document.getElementById('show-note-btn').onclick = () => showNote(sectionIndex);
-
-            
             quizContent.innerHTML = '';
             sectionResultsContainer.innerHTML = '';
-            quizContent.classList.add('md:grid-cols-2'); 
+            quizHeaderActions.innerHTML = '';
+            currentSectionScore = 0;
+            answeredInSection = 0;
 
-            sectionData.questions.forEach((q, qIndex) => {
-                 if (q.type === 'arrange' || sectionData.type === 'arrange') { 
-                    quizContent.classList.remove('md:grid-cols-2'); 
-                    const questionCard = document.createElement('div');
-                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md md:col-span-2'; 
-                    
-                    const sentenceBox = document.createElement('div');
-                    sentenceBox.className = 'sentence-box p-3 rounded-md mb-4 flex items-center justify-end flex-wrap-reverse gap-2 arabic-text text-xl';
-                    
-                    const wordBank = document.createElement('div');
-                    wordBank.className = 'word-bank flex flex-wrap justify-center gap-3 p-3 border-t';
+            // Add "Show Note" button
+            const noteButton = document.createElement('button');
+            noteButton.textContent = '📖 Tunjuk Nota';
+            noteButton.className = 'bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-all';
+            noteButton.onclick = () => showNote(sectionIndex);
+            quizHeaderActions.appendChild(noteButton);
 
-                    const wordsToShuffle = q.words || [];
-                    const shuffledWords = [...wordsToShuffle].sort(() => Math.random() - 0.5);
+            // Render questions
+            sectionData.questions.forEach((question, index) => {
+                renderQuestion(question, index, sectionIndex);
+            });
+        }
 
+        function renderQuestion(question, index, sectionIndex) {
+            const questionCard = document.createElement('div');
+            questionCard.className = 'bg-white p-6 rounded-lg shadow-md w-full';
+            
+            if (question.type === 'arrange') {
+                renderArrangeQuestion(questionCard, question, index);
+            } else {
+                renderMultipleChoiceQuestion(questionCard, question, index);
+            }
+            quizContent.appendChild(questionCard);
+        }
+        
+        function renderMultipleChoiceQuestion(questionCard, question, index) {
+             questionCard.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-semibold text-blue-600">Soalan ${index + 1}</span>
+                </div>
+                <p class="arabic-text mb-2">${question.question}</p>
+                <p class="text-gray-500 text-sm mb-6">${question.translation}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="options-${index}">
+                    ${question.options.map((option, i) => `
+                        <button 
+                            class="option-btn arabic-text w-full p-4 border-2 border-gray-300 rounded-lg text-lg text-gray-800 hover:bg-blue-100 hover:border-blue-400 transition-all"
+                            data-question-index="${index}"
+                            data-option="${option}"
+                        >
+                            ${option}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            
+            const optionButtons = questionCard.querySelectorAll(`#options-${index} button`);
+            optionButtons.forEach(button => {
+                button.addEventListener('click', handleOptionClick);
+            });
+        }
+        
+        function renderArrangeQuestion(questionCard, question, index) {
+            // Shuffle words for the word bank
+            const shuffledWords = [...question.words].sort(() => Math.random() - 0.5);
 
-                    shuffledWords.forEach(word => {
-                        const wordBtn = document.createElement('button');
-                        wordBtn.textContent = word;
-                        wordBtn.className = 'arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                        wordBtn.onclick = () => {
-                            sentenceBox.appendChild(wordBtn);
-                            wordBtn.onclick = null; 
-                        };
-                        wordBank.appendChild(wordBtn);
-                    });
-                    
-                    const actionsContainer = document.createElement('div');
-                    actionsContainer.className = 'flex justify-center gap-4 mt-4';
-                    
-                    const checkBtn = document.createElement('button');
-                    checkBtn.textContent = 'Semak';
-                    checkBtn.className = 'check-btn bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-600';
-                    checkBtn.onclick = () => {
-                        const arrangedSentence = Array.from(sentenceBox.children).map(btn => btn.textContent).join(' ');
-                        if (arrangedSentence === q.answer) {
-                            checkBtn.classList.add('correct');
-                            currentSectionScore++;
-                        } else {
-                            checkBtn.classList.add('incorrect');
-                        }
-                        wordBank.querySelectorAll('button').forEach(btn => btn.disabled = true);
-                        checkBtn.disabled = true;
-                        resetBtn.disabled = true;
-                        answeredInSection++;
-                        if (answeredInSection === sectionData.questions.length) {
-                             showSectionResults();
-                        }
-                    };
+            questionCard.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-semibold text-blue-600">Soalan ${index + 1} (Susun Ayat)</span>
+                </div>
+                <p class="text-gray-500 text-sm mb-4">Susun perkataan berikut menjadi ayat yang betul.</p>
+                
+                <!-- Target Sentence Box -->
+                <div id="sentence-box-${index}" class="sentence-box p-4 rounded-lg bg-gray-50 mb-4 flex flex-wrap-reverse gap-2 justify-end">
+                    <!-- Words will be added here -->
+                </div>
 
-                    const resetBtn = document.createElement('button');
-                    resetBtn.textContent = 'Susun Semula';
-                    resetBtn.className = 'bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600';
-                    resetBtn.onclick = () => {
-                         sentenceBox.innerHTML = '';
-                         wordBank.innerHTML = '';
-                         shuffledWords.forEach(word => {
-                            const wordBtn = document.createElement('button');
-                            wordBtn.textContent = word;
-                            wordBtn.className = 'arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                            wordBtn.onclick = () => {
-                                sentenceBox.appendChild(wordBtn);
-                                wordBtn.onclick = null;
-                            };
-                            wordBank.appendChild(wordBtn);
-                        });
-                    };
+                <!-- Word Bank -->
+                <div id="word-bank-${index}" class="word-bank p-4 rounded-lg bg-gray-100 flex flex-wrap-reverse gap-2 justify-end">
+                    ${shuffledWords.map((word, i) => `
+                        <button 
+                            class="p-2 bg-white border border-gray-300 rounded-md shadow-sm arabic-text text-lg hover:bg-blue-100"
+                            data-word="${word}"
+                            data-question-index="${index}"
+                        >
+                            ${word}
+                        </button>
+                    `).join('')}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-6 flex gap-4">
+                    <button id="check-btn-${index}" data-question-index="${index}" class="check-btn w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">Semak</button>
+                    <button id="reset-btn-${index}" data-question-index="${index}" class="w-full py-2 px-4 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600">Set Semula</button>
+                </div>
+                <p id="feedback-${index}" class="text-center mt-4 font-semibold"></p>
+            `;
 
-                    actionsContainer.appendChild(resetBtn);
-                    actionsContainer.appendChild(checkBtn);
-                    
-                    questionCard.appendChild(sentenceBox);
-                    questionCard.appendChild(wordBank);
-                    questionCard.appendChild(actionsContainer);
-                    quizContent.appendChild(questionCard);
-                } else { 
-                    const questionCard = document.createElement('div');
-                    questionCard.className = 'bg-white p-6 rounded-lg shadow-md flex flex-col items-center';
-                    const questionText = document.createElement('p');
-                    const isArabicQuestion = /[\u0600-\u06FF]/.test(q.question);
-                    questionText.className = isArabicQuestion ? 'arabic-text text-center text-2xl' : 'text-center text-2xl font-semibold';
-                    questionText.textContent = q.question;
-                    
-                    const translationText = document.createElement('p');
-                    translationText.className = 'text-center text-gray-500 mb-5 text-md italic';
-                    translationText.textContent = `(${q.translation})`;
-
-                    const optionsContainer = document.createElement('div');
-                    optionsContainer.className = 'flex justify-center items-center gap-4 mt-auto';
-                    
-                    q.options.forEach(option => {
-                        const button = document.createElement('button');
-                        const isArabicOption = /[\u0600-\u06FF]/.test(option);
-                        button.textContent = option;
-                        button.className = isArabicOption 
-                            ? 'option-btn arabic-text bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300'
-                            : 'option-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded-lg shadow transition-colors duration-300';
-                        button.addEventListener('click', () => handleAnswerClick(button, option, q, optionsContainer));
-                        optionsContainer.appendChild(button);
-                    });
-                    
-                    questionCard.appendChild(questionText);
-                    questionCard.appendChild(translationText);
-                    questionCard.appendChild(optionsContainer);
-                    quizContent.appendChild(questionCard);
+            const wordBank = questionCard.querySelector(`#word-bank-${index}`);
+            const sentenceBox = questionCard.querySelector(`#sentence-box-${index}`);
+            const checkBtn = questionCard.querySelector(`#check-btn-${index}`);
+            const resetBtn = questionCard.querySelector(`#reset-btn-${index}`);
+            const feedback = questionCard.querySelector(`#feedback-${index}`);
+            
+            // Click to move from bank to sentence
+            wordBank.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    sentenceBox.appendChild(e.target);
                 }
             });
 
-        }
-        
-       function showSectionResults() {
-             const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
-             const sectionData = quizData[currentSectionIndex];
-             const scoreKey = sectionData.isFinalExam ? 'final_exam' : `section_${currentSectionIndex}`;
-             
-             sectionScores[scoreKey] = currentSectionScore; 
-
-             let resultsHtml = `
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold mb-2">${sectionData.isFinalExam ? 'Ujian Akhir Selesai!' : 'Bahagian Selesai!'}</h3>
-                    <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${totalQuestionsInSection}</p>`;
-
-             if (sectionData.isFinalExam) {
-                 resultsHtml += `
-                    <button id="submit-final-exam-btn" class="mt-4 bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">
-                        Hantar Markah Ujian Akhir
-                    </button>`;
-             } else {
-                 resultsHtml += `
-                    <button id="finish-section-btn" class="mt-4 bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700">
-                        Kembali ke Halaman Utama
-                    </button>`;
-             }
-             resultsHtml += `</div>`;
-             
-             sectionResultsContainer.innerHTML = resultsHtml;
-
-             if (sectionData.isFinalExam) {
-                 document.getElementById('submit-final-exam-btn').onclick = saveScoreToGoogleSheets;
-             } else {
-                 document.getElementById('finish-section-btn').onclick = () => showView('home');
-             }
-             isFinalExamMode = false; 
+            // Click to move from sentence to bank
+            sentenceBox.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    wordBank.appendChild(e.target);
+                }
+            });
+            
+            // Reset button logic
+            resetBtn.addEventListener('click', () => {
+                // Move all buttons from sentenceBox back to wordBank
+                Array.from(sentenceBox.children).forEach(button => {
+                    wordBank.appendChild(button);
+                });
+                feedback.textContent = '';
+                checkBtn.disabled = false;
+                checkBtn.classList.remove('correct', 'incorrect');
+            });
+            
+            // Check button logic
+            checkBtn.addEventListener('click', (e) => handleArrangeCheck(e, question));
         }
 
+        function handleOptionClick(e) {
+            const selectedButton = e.currentTarget;
+            const questionIndex = selectedButton.dataset.questionIndex;
+            const selectedOption = selectedButton.dataset.option;
+            const question = quizData[currentSectionIndex].questions[questionIndex];
 
-        function handleAnswerClick(button, option, question, optionsContainer) {
-            optionsContainer.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            if (option === question.answer) {
-                button.classList.add('correct');
+            const isCorrect = (selectedOption === question.answer);
+            
+            if (isCorrect) {
+                selectedButton.classList.add('correct');
                 currentSectionScore++;
             } else {
-                button.classList.add('incorrect');
-                optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
-                    if (btn.textContent === question.answer) btn.classList.add('correct');
-                });
+                selectedButton.classList.add('incorrect');
+                // Highlight the correct answer
+                const correctButton = document.querySelector(`#options-${questionIndex} button[data-option="${question.answer}"]`);
+                if (correctButton) {
+                    correctButton.classList.add('correct');
+                }
             }
+
+            // Disable all buttons for this question
+            const allButtons = document.querySelectorAll(`#options-${questionIndex} button`);
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+            });
+
             answeredInSection++;
+            checkSectionCompletion();
+        }
+        
+        function handleArrangeCheck(e, question) {
+            const checkBtn = e.currentTarget;
+            const questionIndex = checkBtn.dataset.questionIndex;
+            const sentenceBox = document.getElementById(`sentence-box-${questionIndex}`);
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
             
-            const totalQuestionsInSection = quizData[currentSectionIndex].questions.length;
-            if (answeredInSection === totalQuestionsInSection) {
+            // Get words from sentence box
+            const arrangedWords = Array.from(sentenceBox.children).map(btn => btn.dataset.word);
+            const arrangedSentence = arrangedWords.join(' ');
+            
+            const isCorrect = (arrangedSentence === question.answer);
+
+            if (isCorrect) {
+                checkBtn.classList.add('correct');
+                feedback.textContent = 'Betul!';
+                feedback.className = 'text-center mt-4 font-semibold text-green-600';
+                currentSectionScore++;
+            } else {
+                checkBtn.classList.add('incorrect');
+                feedback.textContent = `Salah. Jawapan: ${question.answer}`;
+                feedback.className = 'text-center mt-4 font-semibold text-red-600 arabic-text';
+            }
+            
+             // Disable buttons
+            checkBtn.disabled = true;
+            document.querySelectorAll(`#word-bank-${questionIndex} button, #sentence-box-${questionIndex} button`).forEach(btn => {
+                 btn.disabled = true;
+                 btn.style.cursor = 'not-allowed';
+            });
+            document.getElementById(`reset-btn-${questionIndex}`).disabled = true;
+
+            answeredInSection++;
+            checkSectionCompletion();
+        }
+
+        function checkSectionCompletion() {
+            const totalQuestions = quizData[currentSectionIndex].questions.length;
+            if (answeredInSection === totalQuestions) {
                 showSectionResults();
             }
         }
-        
-        async function saveScoreToGoogleSheets() {
-             if (!isFinalExamMode) {
-                 console.warn("Attempted to save score outside of final exam mode.");
-                 return; 
-             }
+
+        function showSectionResults() {
+            const sectionData = quizData[currentSectionIndex];
+            const totalQuestions = sectionData.questions.length;
+            const percentage = Math.round((currentSectionScore / totalQuestions) * 100);
+
+            // Save score
+            const scoreKey = isFinalExamMode ? 'final_exam' : `section_${currentSectionIndex}`;
+            sectionScores[scoreKey] = currentSectionScore;
+
+            sectionResultsContainer.innerHTML = `
+                <div class="bg-white p-8 rounded-lg shadow-xl max-w-lg mx-auto text-center">
+                    <h2 class="text-3xl font-bold ${percentage >= 50 ? 'text-green-600' : 'text-red-600'}">
+                        ${isFinalExamMode ? 'Ujian Selesai!' : 'Latihan Selesai!'}
+                    </h2>
+                    <p class="text-xl text-gray-700 mt-4">Skor Anda:</p>
+                    <p class="text-6xl font-extrabold text-blue-600 my-4">${currentSectionScore} / ${totalQuestions}</p>
+                    <p class="text-4xl font-bold text-blue-600">${percentage}%</p>
+                    <button id="finish-section-btn" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-all text-lg">
+                        ${isFinalExamMode ? 'Hantar Markah & Kembali' : 'Kembali ke Halaman Utama'}
+                    </button>
+                </div>
+            `;
             
-            if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
-                sectionResultsContainer.innerHTML += `<p class="text-red-500 mt-4">Ralat: Sila konfigurasikan URL Google Sheets Web App terlebih dahulu.</p>`;
-                return;
-            }
-            const submitBtn = document.getElementById('submit-final-exam-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Menyimpan...';
-
-             const finalExamScore = sectionScores['final_exam']; 
-             const finalExamTotalQuestions = quizData.find(s => s.isFinalExam)?.questions.length || 0;
-
-
-            const data = {
-                fullName: finalExamFullName, 
-                schoolName: finalExamSchoolName, 
-                scores: { final_exam: finalExamScore }, 
-                totalScore: finalExamScore, 
-                totalQuestions: finalExamTotalQuestions 
-            };
-
-            try {
-                 await fetch(GOOGLE_SHEET_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                    redirect: 'follow' 
-                });
-                
-                sectionResultsContainer.innerHTML = `
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                         <h3 class="text-xl font-bold mb-2">Ujian Akhir Selesai!</h3>
-                         <p>Markah Anda: <span class="font-bold text-blue-600">${currentSectionScore}</span> / ${finalExamTotalQuestions}</p>
-                        <p class="text-green-600 font-semibold my-4 text-xl">Markah anda telah berjaya dihantar!</p>
-                        <button id="view-leaderboard-btn" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 mr-2">Lihat Papan Markah</button>
-                         <button id="back-home-btn" class="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-gray-600">Kembali ke Halaman Utama</button>
-                     </div>
-                `;
-                document.getElementById('view-leaderboard-btn').onclick = () => showView('leaderboard');
-                document.getElementById('back-home-btn').onclick = () => showView('home');
-
-
-            } catch (error) {
-                console.error("Error saving score to Google Sheets:", error);
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Hantar Markah Ujian Akhir';
-                sectionResultsContainer.innerHTML += `<p class="text-red-500 text-sm mt-2">Gagal menghantar markah. Sila periksa konsol untuk ralat.</p>`;
-            }
+            document.getElementById('finish-section-btn').addEventListener('click', finishSection);
         }
 
-        async function showLeaderboardFromGoogleSheets() {
-             if (GOOGLE_SHEET_WEB_APP_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
-                leaderboardContent.innerHTML = `<p class="text-red-500">Papan markah tidak dapat dimuatkan. Sila konfigurasikan URL Google Sheets Web App.</p>`;
-                return;
+        async function finishSection() {
+            if (isFinalExamMode) {
+                await submitFinalExamScoreToGoogleSheets();
             }
-            leaderboardContent.innerHTML = `<p>Memuatkan markah...</p>`;
-            try {
-                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL); 
-                const scores = await response.json();
+            isFinalExamMode = false; // Reset mode
+            currentFullName = 'Pelajar'; // Reset to default
+            currentSchoolName = 'Sekolah'; // Reset to default
+            finalExamFullName = '';
+            finalExamSchoolName = '';
+            userInfo.textContent = ''; // Clear user info from header
+            showView('home');
+        }
 
-                if (scores.length === 0) {
-                    leaderboardContent.innerHTML = `<p>Tiada markah Ujian Akhir lagi. Jadilah yang pertama!</p>`;
-                    return;
+        async function submitFinalExamScoreToGoogleSheets() {
+             const button = document.getElementById('finish-section-btn');
+             button.disabled = true;
+             button.textContent = 'Menghantar...';
+
+             const webAppUrl = GOOGLE_SHEET_WEB_APP_URL; 
+             
+             if (!webAppUrl || webAppUrl === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                 console.error("Sila masukkan Google Sheet Web App URL anda dalam kod.");
+                 // Menggunakan tetingkap modal tersuai dan bukannya alert()
+                 showCustomAlert("Ralat: URL Google Sheet Web App belum ditetapkan. Markah tidak dapat dihantar.");
+                 button.textContent = 'Ralat! Semak Konsol';
+                 button.disabled = false;
+                 return;
+             }
+             
+             const totalQuestions = quizData[currentSectionIndex].questions.length;
+             const percentage = Math.round((currentSectionScore / totalQuestions) * 100);
+             
+             // Menggunakan URLSearchParams untuk POST data
+             const formData = new URLSearchParams();
+             formData.append('fullName', finalExamFullName);
+             formData.append('schoolName', finalExamSchoolName);
+             formData.append('score', currentSectionScore);
+             formData.append('total', totalQuestions);
+             formData.append('percentage', percentage);
+             formData.append('timestamp', new Date().toISOString());
+
+            try {
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Google Apps Script sering mengembalikan ralat CORS walaupun berjaya, jadi 'no-cors' digunakan.
+                });
+                 
+                // Oleh kerana 'no-cors' digunakan, kita tidak boleh membaca status respons.
+                // Kita anggap berjaya jika 'fetch' tidak membuang ralat.
+                console.log("Score submission initiated (no-cors).");
+                showCustomAlert("Markah anda telah berjaya dihantar!");
+
+            } catch (error) {
+                console.error('Error submitting score:', error);
+                showCustomAlert('Terdapat ralat semasa menghantar markah anda. Sila cuba lagi.');
+            } finally {
+                // Walaupun butang akan disembunyikan oleh showView('home'),
+                // adalah amalan baik untuk mengaktifkannya semula.
+                button.disabled = false; 
+            }
+        }
+        
+        async function showLeaderboardFromGoogleSheets() {
+            leaderboardContent.innerHTML = '<p class="text-center text-gray-600">Memuatkan papan markah...</p>';
+            
+            const webAppUrl = GOOGLE_SHEET_WEB_APP_URL;
+
+             if (!webAppUrl || webAppUrl === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+                 console.error("Sila masukkan Google Sheet Web App URL anda dalam kod.");
+                 leaderboardContent.innerHTML = '<p class="text-center text-red-600 font-semibold">Ralat: URL Google Sheet Web App belum ditetapkan.</p>';
+                 return;
+             }
+             
+            try {
+                // Tambah parameter untuk memberitahu skrip kita mahu GET data
+                const response = await fetch(`${webAppUrl}?action=getLeaderboard`);
+                if (!response.ok) {
+                    throw new Error(`Ralat Rangkaian: ${response.statusText}`);
                 }
                 
-                 const finalExamTotalQuestions = quizData.find(s => s.isFinalExam)?.questions.length || 0; 
+                const data = await response.json();
                 
+                if (data.error) {
+                     throw new Error(data.error);
+                }
+
+                if (!data.leaderboard || data.leaderboard.length === 0) {
+                    leaderboardContent.innerHTML = '<p class="text-center text-gray-600">Tiada markah dihantar lagi.</p>';
+                    return;
+                }
+
+                // Susun mengikut peratusan (menurun), kemudian tarikh (menaik)
+                const sortedData = data.leaderboard.sort((a, b) => {
+                    if (b.percentage !== a.percentage) {
+                        return b.percentage - a.percentage;
+                    }
+                    return new Date(a.timestamp) - new Date(b.timestamp);
+                });
+
                 let tableHtml = `
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ked.</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Markah Ujian Akhir</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sekolah</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                 `;
-
-                scores.forEach((entry, index) => {
-                    let rankIcon = index + 1;
-                    if (index === 0) rankIcon = '🏆';
-                    if (index === 1) rankIcon = '🥈';
-                    if (index === 2) rankIcon = '🥉';
-
+                
+                sortedData.forEach((row, index) => {
+                     let trophy = '';
+                     if (index === 0) trophy = '<span class="trophy-gold">🥇</span>';
+                     else if (index === 1) trophy = '<span class="trophy-silver">🥈</span>';
+                     else if (index === 2) trophy = '<span class="trophy-bronze">🥉</span>';
+                
                     tableHtml += `
                         <tr>
-                            <td class="px-4 py-4 whitespace-nowrap text-lg font-bold">${rankIcon}</td>
-                            <td class="px-4 py-4 whitespace-nowrap font-medium text-gray-900">${entry.fullName}</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-gray-500">${entry.schoolName}</td>
-                            <td class="px-4 py-4 whitespace-nowrap font-bold text-blue-600 text-center">${entry.totalScore} / ${entry.totalQuestions || finalExamTotalQuestions}</td> 
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${index + 1} ${trophy}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${row.fullName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${row.schoolName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600">${row.percentage}%</td>
                         </tr>
-                    `; 
+                    `;
                 });
-                tableHtml += `</tbody></table>`;
+
+                tableHtml += '</tbody></table>';
                 leaderboardContent.innerHTML = tableHtml;
 
             } catch (error) {
-                console.error("Error fetching scores from Google Sheets:", error);
-                leaderboardContent.innerHTML = `<p class="text-red-500">Tidak dapat memuatkan papan markah. Sila pastikan URL dan kebenaran adalah betul.</p>`;
+                console.error('Error fetching leaderboard:', error);
+                leaderboardContent.innerHTML = `<p class="text-center text-red-600 font-semibold">Tidak dapat memuatkan papan markah: ${error.message}</p>`;
             }
         }
-        
-        function startQuizApp() {
-            initializeScores();
-            showView('home'); 
+
+        // Fungsi untuk menggantikan alert()
+        function showCustomAlert(message) {
+            // Anda boleh membina modal yang lebih canggih di sini
+            // Untuk sekarang, kita akan gunakan console.log dan modal nota jika boleh
+            console.warn("CUSTOM ALERT:", message);
+            
+            // Re-use note modal for alerts
+            noteTitle.textContent = 'Makluman'; 
+            noteContent.innerHTML = `<p>${message}</p>`;
+            noteModal.style.display = 'flex';
         }
-
+        
+        
+        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-             // Define element references after DOM is loaded
-             mainAppContainer = document.getElementById('main-app-container');
-             userInfo = document.getElementById('user-info'); 
-             mainHeader = document.getElementById('main-header');
-             mainSubtitle = document.getElementById('main-subtitle');
-             homeContainer = document.getElementById('home-container');
-             homeGrid = document.getElementById('home-grid');
-             finalExamEntryContainer = document.getElementById('final-exam-entry-container');
-             finalExamForm = document.getElementById('final-exam-form');
-             quizContainer = document.getElementById('quiz-container');
-             quizHeaderActions = document.getElementById('quiz-header-actions');
-             quizContent = document.getElementById('quiz-content');
-             sectionResultsContainer = document.getElementById('section-results-container');
-             leaderboardContainer = document.getElementById('leaderboard-container');
-             leaderboardContent = document.getElementById('leaderboard-content');
-             menuContainer = document.getElementById('menu-container');
-             noteModal = document.getElementById('note-modal');
-             noteTitle = document.getElementById('note-title');
-             noteContent = document.getElementById('note-content');
-             closeNoteBtn = document.getElementById('close-note-btn');
+            // Assign element references
+            mainAppContainer = document.getElementById('main-app-container');
+            userInfo = document.getElementById('user-info');
+            mainHeader = document.getElementById('main-header');
+            mainSubtitle = document.getElementById('main-subtitle');
+            homeContainer = document.getElementById('home-container');
+            homeGrid = document.getElementById('home-grid');
+            finalExamEntryContainer = document.getElementById('final-exam-entry-container');
+            finalExamForm = document.getElementById('final-exam-form');
+            quizContainer = document.getElementById('quiz-container');
+            quizHeaderActions = document.getElementById('quiz-header-actions');
+            quizContent = document.getElementById('quiz-content');
+            sectionResultsContainer = document.getElementById('section-results-container');
+            leaderboardContainer = document.getElementById('leaderboard-container');
+            leaderboardContent = document.getElementById('leaderboard-content');
+            menuContainer = document.getElementById('menu-container');
+            
+            noteModal = document.getElementById('note-modal');
+            noteTitle = document.getElementById('note-title');
+            noteContent = document.getElementById('note-content');
+            closeNoteBtn = document.getElementById('close-note-btn');
 
-             // Add event listeners
-             finalExamForm.addEventListener('submit', handleFinalExamSubmit);
-             menuContainer.addEventListener('click', handleMenuClick);
-             closeNoteBtn.addEventListener('click', handleCloseNoteClick);
-             noteModal.addEventListener('click', handleModalBackgroundClick);
-
-             // Start the app
-             mainAppContainer.style.display = 'block'; 
-             document.getElementById('year-main').textContent = new Date().getFullYear();
-             startQuizApp(); 
+             // Set Year
+            document.getElementById('year-main').textContent = new Date().getFullYear();
+            
+            // Initialize
+            initializeScores();
+            
+            // Add Event Listeners
+            menuContainer.addEventListener('click', handleMenuClick);
+            finalExamForm.addEventListener('submit', handleFinalExamSubmit);
+            closeNoteBtn.addEventListener('click', handleCloseNoteClick);
+            noteModal.addEventListener('click', handleModalBackgroundClick);
+            
+            // Initial View
+            showView('home');
         });
+
     </script>
 </body>
 </html>
+
 
