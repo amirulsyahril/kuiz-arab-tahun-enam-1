@@ -354,20 +354,6 @@
                     { question: "تَغْسِلُ", translation: "Terjemah ke Bahasa Melayu", options: ["Awak (L) membasuh", "Saya membasuh"], answer: "Awak (L) membasuh" }
                 ]
             },
-            {
-                section: "Bahagian 7: Susun Perkataan Menjadi Ayat Lengkap",
-                note: `
-                    <p><b>Susun Semula!</b></p>
-                    <p class="mt-2">Klik pada perkataan di bawah untuk menyusunnya menjadi ayat yang betul dan lengkap. Rujuk struktur ayat yang telah dipelajari.</p>
-                     <p class="mt-2"><b>Contoh Struktur:</b> Kata Tunjuk + Kata Nama + Sifat / Lokasi.</p>
-                `,
-                type: 'arrange',
-                questions: [
-                    { words: ["أَحْمَرُ", "هَذَا", "لَوْنُ", "الْمِشْطِ"], answer: "هَذَا لَوْنُ الْمِشْطِ أَحْمَرُ" },
-                    { words: ["الْمَغْسَلَةِ", "فِي", "يَدَيَّ", "أُنَظِّفُ"], answer: "أُنَظِّفُ يَدَيَّ فِي الْمَغْسَلَةِ" },
-                    { words: ["الْمِرْآةِ", "أَمَامَ", "الْمِشْطَ", "أَضَعُ"], answer: "أَضَعُ الْمِشْطَ أَمَامَ الْمِرْآةِ" }
-                ]
-            },
             { // New Final Exam Section
                 section: "Ujian Akhir: Uji Kefahaman Anda",
                 isFinalExam: true, // Flag to identify the final exam
@@ -390,8 +376,8 @@
                     // Example Question 6 (from Section 6)
                      { question: "Awak (Lelaki) menggunakan", translation: "Terjemah ke Bahasa Arab", options: ["أَسْتَخْدِمُ", "تَسْتَخْدِمُ"], answer: "تَسْتَخْدِمُ" },
                     // Example Question 7 (from Section 7 - Arrange)
-                    { type: 'arrange', words: ["الْمَغْسَلَةِ", "فِي", "يَدَيَّ", "أُنَظِّفُ"], answer: "أُنَظِّفُ يَدَيَّ فِي الْمَغْسَلَةِ" },
-
+                     { question: "Awak (Lelaki) menggunakan", translation: "Terjemah ke Bahasa Arab", options: ["أَسْتَخْدِمُ", "تَسْتَخْدِمُ"], answer: "تَسْتَخْدِمُ" }
+                    // Soalan 7 (jenis susun) telah dibuang
                 ]
             }
         ];
@@ -406,7 +392,7 @@
         // 5. Tetapkan "Who has access" kepada "Anyone".
         // 6. Klik "Deploy".
         // 7. Salin "Web app URL" dan tampal di bawah.
-        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzJU8lu4aO_5fCChjdH1OseNTdTxOeb1xXXTu7u9_ph_0B2CB9OqA0tKl_oevt-yNys/exec'; // GANTIKAN DENGAN URL WEB APP ANDA
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoDITtQGvYFzaYM6bJxRtZXA8Lkv1J5dyutNxN1w3WJS07BuLM8PNmUEqGYB9sNpsabw/exec'; // GANTIKAN DENGAN URL WEB APP ANDA
 
         // --- Element References ---
         let mainAppContainer, userInfo, mainHeader, mainSubtitle, homeContainer, homeGrid;
@@ -998,5 +984,6 @@
     </script>
 </body>
 </html>
+
 
 
